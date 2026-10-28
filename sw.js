@@ -1,6 +1,6 @@
 // Service worker: офлайн-кэш и фоновые обновления.
 // VERSION меняет release.sh — после этого телефоны сами скачают новую версию.
-const VERSION = "1.2.1";
+const VERSION = "1.3.1";
 const CACHE = "bili-" + VERSION;
 const CORE = ["./", "./index.html", "./manifest.webmanifest", "./icon.svg", "./icon-192.png", "./icon-512.png"];
 const OPTIONAL = [

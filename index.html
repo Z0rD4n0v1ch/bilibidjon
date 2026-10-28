@@ -122,7 +122,7 @@ textarea{width:100%;min-height:90px;font:14px monospace;border:2px solid var(--i
   <main id="screen"></main>
 </div>
 <script>
-const APP_VERSION = "1.2.1";
+const APP_VERSION = "1.3.1";
 const GOAL = 5000;
 const WORDS = ["деньги","плитка","стена","ванная","кухня","шов","краска","быстро","хорошо","криво","завтра","спасибо"];
 const GIB = ["шмурдык","тыгыдык","кукурумба","бряк-бряк","фыр-фыр","бульк","трямс","хрюм"];
@@ -242,10 +242,13 @@ const ACH = {
   nigora:["🍚","Добрый сосед","Помочь Нигоре 3 раза"],
   pizza:["🍕","Пицца цела","Доставка на 95%+"],
   allround:["🧰","Универсал","Поработать в 10 профессиях"],
+  papers:["📄","Все печати собраны","Получить патент"],
+  window3:["🪟","Окно номер 3","Дойти до окна, отбив 3 «только спросить»"],
+  legal:["✅","Всё по закону","Пройти проверку документов"],
 };
 
 let S, EV={type:null};
-function fresh(){return {day:1,money:200,happy:70,rep:30,sent:0,words:[],tools:[],xp:{},tol:0,nasActive:false,nasBought:false,nasStreak:0,withdraw:false,called:false,learned:false,ate:null,hungry:false,strong:false,helper:false,quest:null,finale:false,won:false,endless:false,recorded:false,lastBackup:0,backupSnooze:0,eve:{},project:null,tired:false,nightPending:false,phase:"morning",log:[],mnotes:[],offers:null,result:null,over:null,stats:{calls:0,pies:0,jobs:0,earned:0,nigora:0,types:[]},ach:[],settings:{sound:true,music:false,vibe:true}};}
+function fresh(){return {day:1,money:200,happy:70,rep:30,sent:0,words:[],tools:[],xp:{},tol:0,nasActive:false,nasBought:false,nasStreak:0,withdraw:false,called:false,learned:false,ate:null,hungry:false,strong:false,helper:false,quest:null,finale:false,won:false,endless:false,recorded:false,docs:{patent:0,reg:0,med:false,exam:false,had:false},strikes:0,docGrace:5,mig:null,lastBackup:0,backupSnooze:0,eve:{},project:null,tired:false,nightPending:false,phase:"morning",log:[],mnotes:[],offers:null,result:null,over:null,stats:{calls:0,pies:0,jobs:0,earned:0,nigora:0,types:[]},ach:[],settings:{sound:true,music:false,vibe:true}};}
 function save(){try{localStorage.setItem("bilibidjon",JSON.stringify(S))}catch(e){}}
 function load(){try{const r=localStorage.getItem("bilibidjon");if(r)return JSON.parse(r)}catch(e){}return null}
 const $ = s => document.querySelector(s);
@@ -372,7 +375,7 @@ function renderStats(){
 function render(){
   renderStats();checkAch();save();
   if(S.over) return renderOver();
-  ({morning:renderMorning,work:renderWork,result:renderResult,evening:renderEvening})[S.phase]();
+  ({morning:renderMorning,work:renderWork,result:renderResult,evening:renderEvening,migration:renderMigration})[S.phase]();
   window.scrollTo(0,0);
   showUpdate();
 }
@@ -392,14 +395,14 @@ function startJob(j){S.job=j;S.mnotes=[];S.phase="work";Snd.step();render();}
 function makeOffers(){
   if(S.finale&&!S.won){S.offers=[{type:"tile",client:"mama",text:"Сынок, дом готов. Осталась ванная. Положи плитку сам, только ровно! И поешь.",base:0,finale:true}];return;}
   if(S.project){const i=S.project.i,type=S.project.types[i];S.offers=[{type,client:"edik",project:true,raw:true,base:0,color:rnd(PAINTS),text:`Этап ${i+1} из 3: ${JOBS[type].name.toLowerCase()}. Эдик смотрит на часы.`}];return;}
-  const pool=Object.keys(CLIENTS).filter(k=>CLIENTS[k].minRep<=S.rep);
+  const pool=Object.keys(CLIENTS).filter(k=>CLIENTS[k].minRep<=S.rep&&(patentOk()||!["edik","kristina"].includes(k)));
   const types=Object.keys(JOBS).filter(k=>!JOBS[k].gig&&unlocked(k)).sort(()=>Math.random()-.5);
   const mk=(type,rec)=>{const client=rnd(pool);
     const text=client==="arseniy"&&type==="tile"?"{плитка} {криво}, это стиль! {деньги} дам.":rnd(JOBS[type].orders);
     return {type,client,text,base:JOBS[type].base,color:rnd(PAINTS),rec};};
   S.offers=[mk(types[0]),mk(types[1])];
   if(S.rep>=60)S.offers.push(mk(types[2],true));
-  if(S.rep>=60&&S.day>=5&&Math.random()<.25)S.offers.push({special:"project"});
+  if(S.rep>=60&&S.day>=5&&patentOk()&&Math.random()<.25)S.offers.push({special:"project"});
 }
 function startProject(){
   const types=Object.keys(JOBS).filter(k=>!JOBS[k].gig&&unlocked(k)).sort(()=>Math.random()-.5).slice(0,3);
@@ -417,6 +420,12 @@ function renderMorning(){
   if(S.helper) notes.push("Помощник Фарход на месте. Работа пойдёт легче.");
   if(S.project) notes.push(`🏗️ Ремонт у Эдика: этап ${S.project.i+1} из 3. Другие заказы подождут.`);
   if(S.quest) notes.push(`💍 ${S.quest.text}: ${S.quest.need}₽ до ${S.quest.deadline}-го дня.`);
+  if(!S.docs.had&&S.day<=3) notes.push("🏢 Билибиджон только приехал. Нужно оформить патент в миграционном центре (медкомиссия, экзамен по языку — 6 слов, анкета) и вечером регистрацию у коменданта. Проверки начнутся через несколько дней.");
+  if(S.day>=(S.docGrace||5)){
+    if(!patentOk()) notes.push(`❗ Патента нет — на проверке будет штраф. Нарушений: ${S.strikes} из 3. Эдик и Кристина без патента не работают.`);
+    else if(S.docs.patent-S.day<=2) notes.push(`⚠️ Патент действует до ${S.docs.patent}-го дня. Продли заранее.`);
+    if(!regOk()) notes.push("❗ Регистрации нет — оформи вечером у коменданта.");
+  }
   $("#screen").innerHTML = `
     <div class="panel">
       <h1>${S.finale&&!S.won?"Последний заказ":"Малютка Билибиджон"}</h1>
@@ -437,8 +446,9 @@ function renderMorning(){
         <div class="quote">${o.finale||o.raw?o.text:say(o.text)}</div>
         <p>Оплата: <b>${o.finale?"Бесплатно. Это же мама.":o.project?"1800₽ после всех этапов":S.words.includes("деньги")?Math.round(o.base*C.pay*(o.rec?1.2:1))+"₽ за идеальную работу":"<span class='gib'>"+rnd(GIB)+"</span> ₽"}</b></p>
         <button data-o="${i}">${JOBS[o.type].verb}<small>${o.finale?"Положить плитку маме":"Кивнуть и взяться за работу"}</small></button>
-      </div>`;}).join("")}`;
+      </div>`;}).join("")}${migCard()}`;
   document.querySelectorAll("[data-o]").forEach(b=>b.onclick=()=>startJob(S.offers[+b.dataset.o]));
+  const mg=$("#migGo");if(mg)mg.onclick=goMigration;
   const pb=document.querySelector("[data-p]");if(pb)pb.onclick=startProject;
 }
 
@@ -901,6 +911,7 @@ function endJob(q,note){
     if(J.gig){pay=Math.round(J.base*q*(1+.03*lvl(J.type)));S.happy=clamp(S.happy-5,0,100);notes.push(GIG_NOTES[J.type](q));if(J.type==="courier"&&q>=.95)unlock("pizza");}
     else{const hp=Math.round(15*Math.max(.4,q));S.happy=clamp(S.happy+hp,0,100);S.stats.nigora++;
       notes.push(q>.6?`Полка висит ровно. Нигора сказала «спасибо» и обещала плов со скидкой. Счастье +${hp}.`:`Полка висит… как-то висит. Нигора всё равно рада. Счастье +${hp}.`);if(S.stats.nigora>=3)unlock("nigora");}
+    if(J.gig){const ins=inspect(.08);if(ins){notes.push(ins.t);if(!ins.ok)pay=0;}}
     S.money+=pay;S.stats.earned+=pay;
     S.result={q,pay,notes,dr:0,valeraDone:true,qDone:true,question:null,back:"evening",label:J.gig?JOBS[J.type].name:"Помощь соседке"};
     S.phase="result";q>.6?Snd.coin():Snd.fail();return render();
@@ -915,6 +926,7 @@ function endJob(q,note){
     else notes.push("Эдик кивнул. Оплата — после всех этапов.");
   } else {
     pay=Math.round(J.base*C.pay*(J.rec?1.2:1)*q*(1+.04*S.words.length)*(.8+S.rep/250));
+    if(C.valera&&!patentOk()){pay=Math.round(pay*.75);notes.push("Валера взял без патента, но «за риск» срезал четверть оплаты.");}
     const room=/\{(ванная|кухня)\}/.exec(J.text||"");
     if(room&&!S.words.includes(room[1])&&Math.random()<.35){pay=Math.round(pay*.5);notes.push(`Билибиджон всё сделал отлично. Только не в той комнате (заказчик говорил «${room[1]}»).`);}
     if(C.rush){if(q>=.8)unlock("edik");if(q<.5){pay=Math.round(pay*.5);notes.push("Эдику не понравилось. Он заплатил половину и купил себе ещё одну яхту.");}else notes.push("Эдик доволен и щедр. Почти как в кино.");}
@@ -927,6 +939,7 @@ function endJob(q,note){
     if(q>.9)notes.push("Работа идеальная. Заказчик сказал «спасибо» и что-то ещё, очень длинное.");
   }
   S.rep=clamp(S.rep+dr,0,100);
+  if(!J.night){const ins=inspect(C.valera?.25:.18);if(ins){notes.push(ins.t);if(!ins.ok)pay=0;}}
   let valera=0;if(C.valera&&pay>0&&Math.random()<.45){valera=Math.round(pay*.4);pay-=valera;}
   S.money+=pay;S.stats.earned+=pay;
   const ask=!C.valera&&!J.night&&!J.project&&Math.random()<.45;
@@ -970,6 +983,106 @@ function renderResult(){
     if(S.helper&&Math.random()<.5){const l=rnd(HELPER_LINES);S.log.push(l);if(l.includes("30₽"))S.money+=30;}Snd.step();render();};
 }
 
+/* ================= МИГРАЦИОННЫЙ ЦЕНТР ================= */
+const WORD_EMOJI={"деньги":"💰","плитка":"🟦","стена":"🧱","ванная":"🛁","кухня":"🍳","шов":"➖","краска":"🎨","быстро":"⚡","хорошо":"👍","криво":"〰️","завтра":"📅","спасибо":"🙏"};
+const WINDOW_JOKES=["Окно 3 не работает. Идите в окно 3.","У нас технический перерыв. С 9 до 18.","Вам не сюда. Вам туда. Нет, обратно.","Принтер сломался. Принесите свою бумагу. И принтер.","А справку о справке получили?"];
+const FORM=[["Имя",["Билибиджон","Билибджон","Валера"]],["Фамилия",["Малюткаев","Малюткин","Эдиков"]],["Профессия",["Плиточник","Олигарх","Блогер"]],["Цель приезда",["Работа","Туризм","Шашлык"]],["Где живёт",["Общежитие","Яхта Эдика","Под мостом"]],["Подпись",["✍️ Билибиджон","✍️ ~~~~~","👍"]]];
+const shuffle=a=>a.map(v=>[Math.random(),v]).sort((x,y)=>x[0]-y[0]).map(x=>x[1]);
+function patentOk(){return S.docs.patent>=S.day;}
+function regOk(){return S.docs.reg>=S.day;}
+function inspect(chance){
+  if(S.day<(S.docGrace||5)||Math.random()>chance)return null;
+  if(patentOk()&&regOk()){S.rep=clamp(S.rep+3,0,100);unlock("legal");return {ok:true,t:"🔍 Проверка документов! Проверяющий кивнул. Билибиджон кивнул в ответ. Репутация +3."};}
+  S.strikes++;const fine=Math.max(0,Math.min(S.money,150));S.money-=fine;vib([100,80,100]);
+  const what=!patentOk()&&!regOk()?"ни патента, ни регистрации":!patentOk()?"патента":"регистрации";
+  return {ok:false,t:`🔍 Проверка документов! Нет ${what}. Штраф ${fine}₽, заработок за день изъят. Нарушений: ${S.strikes} из 3.`};
+}
+function migNeeded(){return !patentOk()||S.docs.patent-S.day<=2;}
+function migCard(){
+  if(!migNeeded()||(S.finale&&!S.won)||S.project)return "";
+  const d=S.docs,st=[d.med?"✓ медкомиссия":"• медкомиссия",d.exam?"✓ экзамен":"• экзамен по языку",patentOk()?`✓ патент до ${d.patent}-го дня`:"• патент"];
+  return `<div class="panel"><div class="who">Миграционный центр · весь день, без заработка</div>
+    <p>${patentOk()?"Патент скоро закончится — лучше продлить заранее.":"Чтобы работать официально, нужен патент."}</p>
+    <p class="log">${st.join(" · ")}${!d.exam&&S.words.length<6?` · для экзамена нужно знать 6 слов (знаешь ${S.words.length})`:""}</p>
+    <button id="migGo">🏢 Пойти в миграционный центр<small>Очередь, окошки, печати</small></button></div>`;
+}
+function goMigration(){S.offers=null;S.mig={queued:false,windows:0,log:[],sub:null};S.phase="migration";Snd.step();render();}
+function renderMigration(){
+  const M=S.mig;
+  if(!M.queued)return queueGame();
+  if(M.sub==="exam")return renderExam();
+  if(M.sub==="form")return renderForm();
+  const d=S.docs,w=M.windows,svc=[];
+  if(!d.med)svc.push(`<button data-s="med" ${w<1||S.money<60?"disabled":""}>🩺 Медкомиссия <small>60₽ · окно ${1+Math.floor(Math.random()*9)}</small></button>`);
+  if(!d.exam)svc.push(`<button data-s="exam" ${w<1||S.words.length<6?"disabled":""}>📖 Экзамен по языку <small>${S.words.length<6?`Нужно знать 6 слов, знаешь ${S.words.length}`:"Бесплатно · 5 вопросов, нужно 4 верных"}</small></button>`);
+  if(d.med&&d.exam){
+    if(!d.had)svc.push(`<button data-s="patent" ${w<1||S.money<300?"disabled":""}>📄 Получить патент <small>300₽ · анкета, можно ошибиться один раз · на 10 дней</small></button>`);
+    else svc.push(`<button data-s="renew" ${w<1||S.money<150?"disabled":""}>📄 Продлить патент <small>150₽ · ещё 10 дней</small></button>`);
+  }
+  $("#screen").innerHTML=`<div class="panel"><h2>🏢 Миграционный центр</h2>${hero(rnd(["Где тут окно 3?","Я стою в очереди с рождения.","Печать, печать, ещё печать…"]))}
+    <p>Окон, в которые ты успеешь сегодня: <b>${w}</b></p>${M.log.map(l=>`<p class="log">${l}</p>`).join("")}${svc.join("")}
+    <button class="main" id="migHome">🚪 Уйти домой</button></div>`;
+  document.querySelectorAll("[data-s]").forEach(b=>b.onclick=()=>{const s=b.dataset.s;
+    if(s==="med"){S.money-=60;M.windows--;d.med=true;M.log.unshift("🩺 "+rnd(["Врач посмотрел горло, сказал «годен» и ушёл обедать.","Медкомиссия — 4 минуты. Очередь к ней — 3 часа.","Билибиджона взвесили, измерили и выдали справку. Справка весит больше него."]));Snd.coin();render();}
+    if(s==="exam"){M.windows--;M.sub="exam";M.examQ=null;render();}
+    if(s==="patent"){M.windows--;M.sub="form";M.formI=0;M.formOk=0;M.formBad=null;render();}
+    if(s==="renew"){S.money-=150;M.windows--;d.patent=Math.max(d.patent,S.day-1)+10;M.log.unshift(`📄 Патент продлён до ${d.patent}-го дня. ${rnd(WINDOW_JOKES)}`);Snd.coin();render();}
+  });
+  $("#migHome").onclick=()=>{S.phase="evening";S.log=[...M.log,"Весь день в миграционном центре. Зарплаты нет, зато есть печати."];S.mig=null;S.eve={gig:false,nigora:Math.random()<.3,night:false};Snd.step();render();};
+}
+function renderExam(){
+  const M=S.mig;
+  if(!M.examQ){M.examQ=shuffle(S.words).slice(0,5).map(w=>({w,opts:shuffle([w,...shuffle(WORDS.filter(x=>x!==w)).slice(0,2)])}));M.examI=0;M.examOk=0;}
+  if(M.examI>=M.examQ.length){M.sub=null;
+    if(M.examOk>=4){S.docs.exam=true;M.log.unshift(`📖 Экзамен сдан: ${M.examOk} из 5! Экзаменатор сказал «${rnd(["молодец","неплохо","почти как местный"])}».`);Snd.fanfare();}
+    else{M.log.unshift(`📖 Экзамен не сдан: ${M.examOk} из 5. Экзаменатор вздохнул: «Приходите, когда подучите слова».`);Snd.fail();}
+    return render();}
+  const Q=M.examQ[M.examI];
+  $("#screen").innerHTML=`<div class="panel"><h2>📖 Экзамен · вопрос ${M.examI+1} из 5</h2><p>Экзаменатор показывает карточку:</p>
+    <p style="font-size:4.5rem;text-align:center;margin:.2em 0">${WORD_EMOJI[Q.w]||"❓"}</p><p>Как это называется?</p>
+    ${Q.opts.map(o=>`<button data-x="${o}">${o}</button>`).join("")}</div>`;
+  document.querySelectorAll("[data-x]").forEach(b=>b.onclick=()=>{if(b.dataset.x===Q.w){M.examOk++;Snd.click(1);}else{Snd.fail();vib(60);}M.examI++;render();});
+}
+function renderForm(){
+  const M=S.mig,d=S.docs;
+  if(M.formI>=FORM.length){M.sub=null;
+    if(M.formOk>=FORM.length-1){S.money-=300;d.patent=S.day+9;d.had=true;unlock("papers");
+      M.log.unshift(`📄 ПАТЕНТ ПОЛУЧЕН! Действует до ${d.patent}-го дня. Билибиджон держит его двумя руками и боится дышать.`);Snd.fanfare();vib([60,40,60]);}
+    else{M.log.unshift(`📄 Анкету вернули: ошибка в поле «${M.formBad}». «Переписывайте. В другой день». Деньги не взяли.`);Snd.fail();}
+    return render();}
+  const [label,opts]=FORM[M.formI];
+  $("#screen").innerHTML=`<div class="panel"><h2>📄 Анкета на патент · ${M.formI+1} / ${FORM.length}</h2>
+    <p class="log">Сотрудница смотрит поверх очков. Внимательно: одна буква — и всё заново.</p>
+    <div class="quote">${label}: ________</div>${shuffle(opts).map(o=>`<button data-f="${esc(o)}">${o}</button>`).join("")}</div>`;
+  document.querySelectorAll("[data-f]").forEach(b=>b.onclick=()=>{if(b.dataset.f===opts[0]){M.formOk++;Snd.click(1);}else{M.formBad=M.formBad||label;Snd.fail();vib(60);}M.formI++;render();});
+}
+function queueGame(){
+  $("#screen").innerHTML=`<div class="panel"><h2>🏢 Очередь</h2><p class="log">Очередь ползёт к окну. Тапай по тем, кто лезет «только спросить», — иначе тебя отодвинут назад.</p>
+    <div class="hud"><span id="tm">--</span><span id="sc"></span></div><canvas id="cv"></canvas></div>`;
+  const cv=$("#cv"),{c,w,h}=setupCanvas(cv,.85),sp=speedMul("queue");
+  let pos=8,cut=[],nextCut=1,nextAdv=1.5,t=0,joke=rnd(WINDOW_JOKES),blocked=0;
+  const gap=Math.min(32,(w-110)/11),slotX=i=>w-72-i*gap,qy=h*.7;
+  cv.onpointerdown=e=>{e.preventDefault();const b=cv.getBoundingClientRect(),x=e.clientX-b.left,y=e.clientY-b.top;
+    for(const k of cut)if(!k.done&&Math.hypot(k.x-x,k.y-y)<46){k.done=1;blocked++;Snd.click(1);joke="Билибиджон: «Я тут стоял!»";return;}};
+  timer(16,tt=>{t=tt;
+    if(t>nextAdv&&pos>0){pos--;nextAdv=t+1.5;Snd.step();}
+    if(t>nextCut&&pos>1){const sx=20+Math.random()*(w-130);cut.push({sx,sy:24,x:sx,y:24,t0:t,dur:1.4/sp});nextCut=t+1.1+Math.random()*1.2;}
+    for(const k of cut){if(k.done)continue;const p=(t-k.t0)/k.dur,tx=slotX(Math.max(0,pos-1));k.x=k.sx+(tx-k.sx)*p;k.y=k.sy+(qy-k.sy)*p;
+      if(p>=1){k.done=1;pos=Math.min(10,pos+1);Snd.fail();vib(50);joke="«Я только спросить!» — и встал перед тобой.";}}
+    cut=cut.filter(k=>!k.done);$("#sc").textContent="перед тобой: "+pos;
+    c.fillStyle=css("--surface");c.fillRect(0,0,w,h);c.fillStyle=css("--grout");c.fillRect(0,qy+18,w,h);
+    c.fillStyle="#9FD3F2";c.fillRect(w-54,qy-70,44,60);c.strokeStyle=css("--ink");c.lineWidth=3;c.strokeRect(w-54,qy-70,44,60);
+    c.fillStyle=css("--ink");c.font="500 12px BiliBody,Rubik,sans-serif";c.fillText("Окно 3",w-54,qy-76);
+    c.font="26px sans-serif";c.textAlign="center";
+    for(let i=0;i<pos;i++)c.fillText("🧍",slotX(i),qy+10);
+    c.fillText("👷",slotX(pos),qy+10);for(let i=pos+1;i<pos+4;i++)c.fillText("🧍",slotX(i),qy+10);
+    for(const k of cut)c.fillText("🙋",k.x,k.y+10);c.textAlign="start";
+    c.fillStyle=css("--ink");c.font="500 15px BiliBody,Rubik,sans-serif";c.fillText(joke,12,22);
+    return pos===0;
+  },()=>{const q=clamp(1-pos/8,0,1),M=S.mig;M.queued=true;M.windows=q>=.7?3:q>=.4?2:1;if(pos===0&&blocked>=3)unlock("window3");
+    M.log.unshift(pos===0?`Дошёл до окна! Отбил ${blocked} «только спросить». Окон сегодня: ${M.windows}.`:`Окно закрылось на «технический перерыв». Успеешь только в ${M.windows} ${M.windows===1?"окно":"окна"}.`);render();});
+}
+
 /* ================= ВЕЧЕР ================= */
 function sendHome(sum){
   const before=stageCount();S.money-=sum;S.sent+=sum;S.happy=clamp(S.happy+3,0,100);S.log.unshift("Перевод ушёл. Мама уже пишет «зачем так много».");Snd.coin();
@@ -998,6 +1111,14 @@ function renderEvening(){
       <button class="main" id="sleep">Спать</button>
     </div>
     ${S.log.length?`<div class="panel log">${S.log.map(l=>`<p>${l}</p>`).join("")}</div>`:""}
+    <div class="panel"><h2>📄 Документы</h2><div class="skills">
+      <div><span>🩺 Медкомиссия</span><span>${S.docs.med?"✓":"—"}</span></div>
+      <div><span>📖 Экзамен по языку</span><span>${S.docs.exam?"✓":"—"}</span></div>
+      <div><span>📄 Патент</span><span>${patentOk()?`до ${S.docs.patent}-го дня`:S.docs.had?"просрочен ❗":"нет"}</span></div>
+      <div><span>🏠 Регистрация</span><span>${regOk()?`до ${S.docs.reg}-го дня`:"нет ❗"}</span></div>
+      <div><span>⚖️ Нарушения</span><span>${S.strikes} из 3</span></div></div>
+      <button id="reg" ${S.money<40||S.docs.reg-S.day>5?"disabled":""}>🏠 Регистрация у коменданта <small>40₽ · на 15 дней${S.docs.reg-S.day>5?" · пока не нужно":""}</small></button>
+      <p class="log">Патент оформляется утром в миграционном центре.</p></div>
     <div class="panel"><h2>Ужин</h2>
       ${S.ate?`<p class="log">${S.ate==="pies"?"Сегодня ужин — пирожки бабушки Зины.":"Билибиджон сыт и доволен."}</p>`:'<p class="log">Без ужина завтра будет тяжело.</p>'}
       ${FOOD.map(f=>`<button data-f="${f.id}" ${S.ate||S.money<foodPrice(f)?"disabled":""}>${f.e} ${f.name} <small>${foodPrice(f)}₽ · ${f.desc}</small></button>`).join("")}
@@ -1031,6 +1152,7 @@ function renderEvening(){
   document.querySelectorAll("[data-t]").forEach(b=>b.onclick=()=>{const t=TOOLS.find(x=>x.id===b.dataset.t);S.money-=t.price;S.tools.push(t.id);S.log.unshift(`Куплено: ${t.name}. Билибиджон спит с ним в обнимку.`);Snd.coin();render();});
   const g=$("#gig");if(g)g.onclick=()=>{const opts=Object.keys(JOBS).filter(k=>JOBS[k].gig).sort(()=>Math.random()-.5).slice(0,2);
     showDialog("Подработка","<p class='log'>Сегодня есть такие варианты:</p>",[...opts.map(k=>[`${GIG_E[k]} ${JOBS[k].name} · до ${JOBS[k].base}₽`,()=>{closeDialog();S.eve.gig=true;startJob({type:k,client:"gig",gig:true,base:JOBS[k].base,text:""});}]),["Не сегодня",closeDialog]]);};
+  const rg=$("#reg");if(rg)rg.onclick=()=>{S.money-=40;S.docs.reg=Math.max(S.docs.reg,S.day-1)+15;S.log.unshift("🏠 "+rnd(["Комендант поставил печать и рассказал про своего кота.","Регистрация продлена. Комендант попросил заодно починить кран.","Комендант долго искал ручку. Нашёл. Печать стоит."]));Snd.coin();render();};
   const bk=$("#bkFile");if(bk){bk.onclick=async()=>{await exportFile();render();};$("#bkLater").onclick=()=>{S.backupSnooze=S.day+2;render();};}
   const ng=$("#nig");if(ng)ng.onclick=()=>{S.eve.nigora=false;startJob({type:"drywall",client:"nigora",nigora:true,base:0,text:""});};
   $("#sleep").onclick=()=>{if(S.eve.night){S.eve.night=false;Snd.ring();vib([200,100,200]);
@@ -1051,7 +1173,7 @@ function sleep(){
   S.day++;S.offers=null;S.phase="morning";S.mnotes=[];
   if(S.quest&&S.day>S.quest.deadline){S.happy-=25;S.mnotes.push(`Не успел: «${S.quest.text}». Мама сказала «ничего, сынок». От этого ещё хуже.`);S.quest=null;}
   S.happy=clamp(S.happy,0,100);
-  if(S.money<0)S.over="broke";else if(S.happy<=0)S.over="sad";
+  if(S.strikes>=3)S.over="deported";else if(S.money<0)S.over="broke";else if(S.happy<=0)S.over="sad";
   Snd.tone(330,.4,"sine",.05,220);
   render();
 }
@@ -1066,6 +1188,7 @@ function renderOver(){
   const t={
     win:["Дом построен!",`Билибиджон положил плитку в маминой ванной${S.result&&S.result.q>.8?" — идеально ровно":" — почти ровно, но мама сказала, что идеально"}. Кот толстеет, бабушка рассказывает всем про сына-плиточника.`],
     broke:["Денег нет","Билибиджон ночует на объекте, обнимая мешок шпаклёвки. Мешок тёплый, но это не жизнь."],
+    deported:["Билибиджона отправили домой","Три нарушения — и Билибиджон летит домой. Мама встречает в аэропорту с пловом и говорит: «Документы надо было продлевать, сынок». В следующий раз — обязательно."],
     sad:["Билибиджон уехал домой","Слишком долго без звонков. Он купил билет на последние деньги и прямо в аэропорту позвонил маме."]
   }[S.over];
   $("#screen").innerHTML=`<div class="panel"><h1>${t[0]}</h1><div class="tape"></div>${S.over==="win"?`<div class="house">${house(5)}</div>`:`<div class="hero">${sprite("sad")}</div>`}<p>${t[1]}</p>
@@ -1107,8 +1230,8 @@ function askPersist(){try{if(navigator.storage&&navigator.storage.persist){navig
 function needBackup(){return S.day>=4&&S.day-(S.lastBackup||0)>=5&&S.day>=(S.backupSnooze||0);}
 function parseSave(txt){txt=String(txt).trim();let d;try{d=JSON.parse(txt);}catch(e){d=JSON.parse(decodeURIComponent(escape(atob(txt))));}
   if(d&&d.game==="bilibidjon")d=d.state;if(!d||typeof d.day!=="number")throw new Error("bad save");return d;}
-function applySave(d){const set=S.settings;S=Object.assign(fresh(),d);S.settings=set;S.stats=Object.assign(fresh().stats,S.stats||{});S.eve=S.eve||{};S.xp=S.xp||{};S.ach=S.ach||[];
-  if(S.phase==="work")S.phase="morning";closeDialog();save();toast("Игра загружена!");Snd.fanfare();render();}
+function applySave(d){const set=S.settings;S=Object.assign(fresh(),d);S.settings=set;S.stats=Object.assign(fresh().stats,S.stats||{});S.eve=S.eve||{};S.xp=S.xp||{};S.ach=S.ach||[];S.docs=Object.assign(fresh().docs,S.docs||{});
+  if(S.phase==="work")S.phase="morning";if(S.phase==="migration"&&!S.mig)S.mig={queued:false,windows:0,log:[],sub:null};closeDialog();save();toast("Игра загружена!");Snd.fanfare();render();}
 async function exportFile(){
   askPersist();
   const name=`bilibidjon-save-den-${S.day}.json`,data=JSON.stringify({game:"bilibidjon",version:APP_VERSION,saved:new Date().toISOString(),state:S},null,1);
@@ -1193,7 +1316,7 @@ document.addEventListener("visibilitychange",()=>{if(document.hidden&&S.phase===
 /* ================= СТАРТ ================= */
 (function(){const old=load()||{};S=Object.assign(fresh(),old);
   if("sound" in old&&!old.settings){S.settings.sound=old.sound;delete S.sound;}
-  S.stats=Object.assign(fresh().stats,S.stats||{});S.eve=S.eve||{};S.xp=S.xp||{};S.ach=S.ach||[];S.mnotes=S.mnotes||[];
+  S.stats=Object.assign(fresh().stats,S.stats||{});S.eve=S.eve||{};if(!old.docs&&old.day>1)S.docGrace=old.day+4;S.docs=Object.assign(fresh().docs,S.docs||{});if(S.phase==="migration"&&!S.mig)S.mig={queued:false,windows:0,log:[],sub:null};S.xp=S.xp||{};S.ach=S.ach||[];S.mnotes=S.mnotes||[];
   if(S.phase==="work")S.phase="morning";
   if(S.phase==="result"&&S.result&&S.result.valeraDone===undefined){S.result.valeraDone=true;S.result.qDone=true;S.result.dr=0;}
 })();
