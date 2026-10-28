@@ -13,6 +13,14 @@ REPO_URL="https://github.com/$GH_USER/$REPO"
 say()  { printf '\n\033[1;33m== %s\033[0m\n' "$*"; }
 ok()   { printf '\033[1;32m✓ %s\033[0m\n' "$*"; }
 fail() { printf '\033[1;31m✗ %s\033[0m\n' "$*"; exit 1; }
+start_agent() {  # если у ключа есть пароль — спросит его один раз, дальше проверки пройдут без вопросов
+  for k in "$HOME/.ssh/id_ed25519" "$HOME/.ssh/id_rsa"; do
+    [ -f "$k" ] || continue
+    [ -n "${SSH_AUTH_SOCK:-}" ] || eval "$(ssh-agent -s)" >/dev/null
+    ssh-add "$k" 2>/dev/null || true
+  done
+}
+ssh_ok() { ssh -o BatchMode=yes -o ConnectTimeout=8 -o StrictHostKeyChecking=accept-new -T git@github.com 2>&1 | grep -q "successfully authenticated"; }
 open_url() { start "" "$1" 2>/dev/null || explorer "$1" 2>/dev/null || echo "Открой вручную: $1"; }
 
 # --- 1. Проверки ---------------------------------------------------------
@@ -40,6 +48,7 @@ if [ ! -d .git ]; then
   ok "Репозиторий создан"
 fi
 git branch -M main
+git config core.autocrlf false   # переносы строк задаёт .gitattributes, предупреждения не нужны
 
 if [ -z "$(git config user.name || true)" ]; then
   read -r -p "Твоё имя для коммитов: " N; git config user.name "$N"
@@ -58,6 +67,7 @@ fi
 
 # --- 3. Репозиторий на GitHub и отправка -----------------------------------
 say "Отправляю на GitHub"
+start_agent
 HAS_GH=0
 if command -v gh >/dev/null && gh auth status >/dev/null 2>&1; then HAS_GH=1; fi
 
@@ -71,16 +81,26 @@ if ! git remote get-url origin >/dev/null 2>&1; then
     echo "(без README, без .gitignore, без лицензии — галочки не ставь)"
     open_url "https://github.com/new?name=$REPO&visibility=public"
     read -r -p "Создал? Нажми Enter... " _
-    git remote add origin "$REPO_URL.git"
+    if ssh_ok; then git remote add origin "git@github.com:$GH_USER/$REPO.git"; else git remote add origin "$REPO_URL.git"; fi
   fi
 fi
 
-if ! git push -u origin main; then
+push_ok=0
+git push -u origin main && push_ok=1
+if [ $push_ok = 0 ] && git remote get-url origin | grep -q '^https' && ssh_ok; then
+  echo "HTTPS не пустил — пробую через SSH-ключ…"
+  git remote set-url origin "git@github.com:$GH_USER/$REPO.git"
+  git push -u origin main && push_ok=1
+fi
+if [ $push_ok = 0 ]; then
   echo
   echo "Push не прошёл. Частые причины:"
   echo " • 403 — вошёл не в тот аккаунт. Открой «Диспетчер учётных данных» Windows,"
   echo "   удали запись git:https://github.com и запусти скрипт снова — Git попросит войти."
   echo " • Repository not found — репозиторий не создан или имя не $REPO."
+  echo " • «Базовое соединение закрыто» / «No anonymous write access» — окно входа GitHub не смогло"
+  echo "   подключиться. Обнови Git for Windows с git-scm.com (вместе с ним обновится вход в GitHub)"
+  echo "   или настрой SSH-ключ: github.com/settings/keys. Потом снова bash deploy.sh"
   fail "Исправь и запусти bash deploy.sh ещё раз."
 fi
 ok "Код на GitHub"
