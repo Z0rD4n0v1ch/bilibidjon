@@ -1,6 +1,6 @@
 // Service worker: офлайн-кэш и фоновые обновления с прогрессом.
 // VERSION меняет release.sh — после этого игра у игроков сама скачает новую версию.
-const VERSION = "1.8.2";
+const VERSION = "1.8.3";
 const CACHE = "bili-" + VERSION;
 // Обязательна только сама игра. Если какой-то иконки или шрифта нет на сайте,
 // обновление всё равно установится (раньше один пропавший файл блокировал обновления).
@@ -44,7 +44,8 @@ self.addEventListener("install", e => {
         } else body = await res.blob();
         await cache.put(url, new Response(body, { status: 200, headers: type ? { "Content-Type": type } : {} }));
       } catch (err) {
-        if (!optional) { await tell({ type: "SW_ERROR" }); throw err; }
+        // Даже если файл не скачался, установку не срываем: недостающее игра возьмёт из сети.
+        if (!optional) await tell({ type: "SW_WARN", url });
       }
       done++;
       await tell({ type: "SW_PROGRESS", p: done / files.length });
