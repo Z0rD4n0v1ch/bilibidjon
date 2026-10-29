@@ -1,13 +1,15 @@
 // Service worker: офлайн-кэш и фоновые обновления с прогрессом.
 // VERSION меняет release.sh — после этого игра у игроков сама скачает новую версию.
-const VERSION = "1.8.1";
+const VERSION = "1.8.2";
 const CACHE = "bili-" + VERSION;
-const CORE = ["./", "./index.html", "./manifest.webmanifest", "./icon.svg", "./icon-180.png", "./icon-192.png", "./icon-512.png"];
+// Обязательна только сама игра. Если какой-то иконки или шрифта нет на сайте,
+// обновление всё равно установится (раньше один пропавший файл блокировал обновления).
+const CORE = ["./", "./index.html"];
 const OPTIONAL = [
   "russo-one-cyrillic-400-normal", "russo-one-latin-400-normal",
   "rubik-cyrillic-400-normal", "rubik-cyrillic-500-normal", "rubik-cyrillic-700-normal",
   "rubik-latin-400-normal", "rubik-latin-500-normal", "rubik-latin-700-normal",
-].map(f => "./fonts/" + f + ".woff2");
+].map(f => "./fonts/" + f + ".woff2").concat(["./manifest.webmanifest", "./icon.svg", "./icon-180.png", "./icon-192.png", "./icon-512.png"]);
 
 async function tell(msg) {
   const list = await self.clients.matchAll({ includeUncontrolled: true, type: "window" });

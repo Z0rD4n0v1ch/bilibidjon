@@ -170,7 +170,7 @@ textarea{width:100%;min-height:90px;font:16px monospace;border:2px solid var(--i
   <main id="screen"></main>
 </div>
 <script>
-const APP_VERSION = "1.8.1";
+const APP_VERSION = "1.8.2";
 const GOAL = 5000;
 const WORDS = ["деньги","плитка","стена","ванная","кухня","шов","краска","быстро","хорошо","криво","завтра","спасибо"];
 const GIB = ["шмурдык","тыгыдык","кукурумба","бряк-бряк","фыр-фыр","бульк","трямс","хрюм"];
@@ -1855,6 +1855,7 @@ function openSettings(){
     ["💾 Сохранить в файл",exportFile],
     ["📂 Загрузить из файла",importFile],
     ["🔑 Код сохранения",openSaveCode],
+    ["🔄 Проверить обновления",checkUpdatesNow],
     ...(canNotify()?[[`🔔 Уведомления о новых версиях: ${on(!!st.notify)}`,toggleNotify]]:[]),
     ...(standalone?[]:[["📲 Установить приложение",installApp]]),
     ["🔐 Секретный код",openSecret],
@@ -1947,6 +1948,16 @@ function showUpdate(){
   d.innerHTML=`<div class="panel" role="status" aria-live="polite">${body}</div>`;
   const go=$("#updGo");if(go)go.onclick=installUpdate;
   const lt=$("#updLater");if(lt)lt.onclick=()=>{if(upd.state==="error")upd.state=null;else updateDismissed=true;d.remove();};
+}
+async function checkUpdatesNow(){
+  closeDialog();
+  if(!("serviceWorker" in navigator)||location.protocol==="file:")return toast("Обновления работают только в установленной игре");
+  toast("🔄 Проверяю…");
+  try{const r=await navigator.serviceWorker.getRegistration();if(!r)return toast("Проверка недоступна, перезапусти игру");
+    await r.update();
+    if(r.installing||r.waiting||upd.state)toast("🆕 Нашлась новая версия — скачиваю!");
+    else{await fetchInfo();toast(upd.info.version&&upd.info.version!==APP_VERSION?`На сайте ${upd.info.version}, у тебя ${APP_VERSION} — скачиваю…`:`✅ У тебя последняя версия ${APP_VERSION}`);}
+  }catch(e){toast("Нет связи с сайтом. Проверь интернет");}
 }
 function installUpdate(){
   if(!upd.worker)return;save();upd.state="installing";upd.step=0;showUpdate();
