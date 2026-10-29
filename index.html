@@ -170,7 +170,7 @@ textarea{width:100%;min-height:90px;font:16px monospace;border:2px solid var(--i
   <main id="screen"></main>
 </div>
 <script>
-const APP_VERSION = "1.8.3";
+const APP_VERSION = "1.8.4";
 const GOAL = 5000;
 const WORDS = ["деньги","плитка","стена","ванная","кухня","шов","краска","быстро","хорошо","криво","завтра","спасибо"];
 const GIB = ["шмурдык","тыгыдык","кукурумба","бряк-бряк","фыр-фыр","бульк","трямс","хрюм"];
@@ -1856,6 +1856,7 @@ function openSettings(){
     ["📂 Загрузить из файла",importFile],
     ["🔑 Код сохранения",openSaveCode],
     ["🔄 Проверить обновления",checkUpdatesNow],
+    ["🧹 Починить игру",repairGame],
     ...(canNotify()?[[`🔔 Уведомления о новых версиях: ${on(!!st.notify)}`,toggleNotify]]:[]),
     ...(standalone?[]:[["📲 Установить приложение",installApp]]),
     ["🔐 Секретный код",openSecret],
@@ -1956,9 +1957,32 @@ async function checkUpdatesNow(){
   try{const r=await navigator.serviceWorker.getRegistration();if(!r)return toast("Проверка недоступна, перезапусти игру");
     await r.update();
     if(r.installing||r.waiting||upd.state)toast("🆕 Нашлась новая версия — скачиваю!");
-    else{await fetchInfo();toast(upd.info.version&&upd.info.version!==APP_VERSION?`На сайте ${upd.info.version}, у тебя ${APP_VERSION} — скачиваю…`:`✅ У тебя последняя версия ${APP_VERSION}`);}
+    else{await fetchInfo();const newer=upd.info.version&&cmpVer(upd.info.version,APP_VERSION)>0;
+      toast(newer?`На сайте ${upd.info.version}, у тебя ${APP_VERSION} — обновляю…`:`✅ У тебя последняя версия ${APP_VERSION}`);
+      if(newer)setTimeout(()=>{if(!upd.state||upd.state==="error")hardUpdate();},5000);}
   }catch(e){toast("Нет связи с сайтом. Проверь интернет");}
 }
+// Запасной путь: если обычное обновление по какой-то причине не стартовало,
+// сравниваем версию с сайтом и переустанавливаем игру начисто (сохранения не трогаем).
+function cmpVer(a,b){const x=String(a).split(".").map(Number),y=String(b).split(".").map(Number);for(let i=0;i<3;i++){const d=(x[i]||0)-(y[i]||0);if(d)return d;}return 0;}
+async function fallbackCheck(){
+  if(!("serviceWorker" in navigator)||location.protocol==="file:")return;
+  await fetchInfo();if(!upd.info.version||cmpVer(upd.info.version,APP_VERSION)<=0||upd.state)return;
+  try{const r=await navigator.serviceWorker.getRegistration();if(r)await r.update();}catch(e){}
+  setTimeout(()=>{if(!upd.state||upd.state==="error")hardUpdate();},20000);
+}
+async function hardUpdate(){
+  save();upd.state="installing";upd.step=1;showUpdate();
+  try{localStorage.setItem("bili_updated","1");}catch(e){}
+  try{for(const r of await navigator.serviceWorker.getRegistrations())await r.unregister();}catch(e){}
+  upd.step=2;showUpdate();
+  try{for(const k of await caches.keys())if(k.startsWith("bili-"))await caches.delete(k);}catch(e){}
+  upd.step=3;showUpdate();reloading=true;
+  setTimeout(()=>location.replace(location.pathname+"?v="+encodeURIComponent(upd.info.version||Date.now())),500);
+}
+function repairGame(){showDialog("🧹 Починить игру","<p>Игра удалит свою сохранённую копию и заново скачает её с сайта. <b>Прогресс останется.</b></p><p class='log'>Нужен интернет.</p>",
+  [["🧹 Починить",()=>{closeDialog();hardUpdate();}],["Отмена",closeDialog]]);}
+setTimeout(fallbackCheck,6000);
 function installUpdate(){
   if(!upd.worker)return;save();upd.state="installing";upd.step=0;showUpdate();
   try{localStorage.setItem("bili_updated","1");}catch(e){}
