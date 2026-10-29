@@ -5,8 +5,14 @@
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>Малютка Билибиджон</title>
 <meta name="theme-color" content="#FFC93C">
+<meta name="theme-color" media="(prefers-color-scheme: dark)" content="#0E1A33">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="default">
+<meta name="apple-mobile-web-app-title" content="Билибиджон">
+<meta name="format-detection" content="telephone=no">
 <link rel="icon" href="icon.svg" type="image/svg+xml">
-<link rel="apple-touch-icon" href="icon-192.png">
+<link rel="apple-touch-icon" sizes="180x180" href="icon-180.png">
 <link rel="manifest" href="manifest.webmanifest">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -47,7 +53,7 @@
 *,*::before,*::after{box-sizing:inherit}
 html{scroll-padding-top:env(safe-area-inset-top,0px)}
 body{
-  margin:0; min-height:100vh; color:var(--ink); font:16px/1.5 BiliBody,Rubik,system-ui,sans-serif;
+  margin:0; min-height:100vh; min-height:100dvh; -webkit-touch-callout:none; -webkit-text-size-adjust:100%; color:var(--ink); font:16px/1.5 BiliBody,Rubik,system-ui,sans-serif;
   touch-action:manipulation; overscroll-behavior:none; -webkit-tap-highlight-color:transparent; -webkit-user-select:none; user-select:none;
   background-color:var(--bg);
   background-image:linear-gradient(var(--grout) 3px,transparent 3px),linear-gradient(90deg,var(--grout) 3px,transparent 3px);
@@ -98,6 +104,7 @@ canvas{display:block;width:100%;touch-action:none;border:3px solid var(--ink);bo
 .upd{position:fixed;left:0;right:0;bottom:0;z-index:15;padding:0 14px calc(env(safe-area-inset-bottom,0px) + 8px);animation:up .35s ease-out}
 .upd .panel{max-width:452px;margin:0 auto;border-color:var(--ink);background:var(--surface)}
 .upd button{display:inline-block;width:auto;margin-right:8px}
+.bar.big{height:10px;margin:6px 0}.bar.big i{transition:width .2s}
 @keyframes up{from{transform:translateY(110%)}}
 @media (prefers-reduced-motion:reduce){button:active{transform:none}.bili,.bili.dizzy{animation:none}}
 .stats{grid-template-columns:repeat(4,1fr) 40px}
@@ -112,7 +119,7 @@ details summary{cursor:pointer;font-family:BiliDisplay,"Russo One",sans-serif;fo
 .skills div{display:flex;justify-content:space-between;border-bottom:1px dashed var(--grout);padding:3px 0;font-size:.9rem}
 .house svg{width:100%;height:auto;display:block;border:3px solid var(--ink);border-radius:4px}
 .tag{display:inline-block;background:var(--tape);color:#14213D;font-size:.75rem;font-weight:700;padding:0 6px;border-radius:2px;margin-left:4px}
-textarea{width:100%;min-height:90px;font:14px monospace;border:2px solid var(--ink);border-radius:4px;background:var(--surface);color:var(--ink);padding:6px;-webkit-user-select:text;user-select:text}
+textarea{width:100%;min-height:90px;font:16px monospace;border:2px solid var(--ink);border-radius:4px;background:var(--surface);color:var(--ink);padding:6px;-webkit-user-select:text;user-select:text}
 .ev{background:var(--tape);color:#14213D;padding:4px 8px;border-radius:2px;font-weight:500;font-size:.9rem}
 /* --- минималистичный HUD --- */
 .stats{display:flex;align-items:center;gap:clamp(8px,3vw,14px);padding:7px 6px 7px 12px;margin:6px 0 4px;background:var(--surface);border:2px solid var(--ink);border-radius:999px;box-shadow:3px 3px 0 var(--ink);transition:opacity .25s}
@@ -129,6 +136,32 @@ textarea{width:100%;min-height:90px;font:14px monospace;border:2px solid var(--i
 .gear:focus-visible{outline:2px solid var(--cobalt)}
 .hud{font:500 .9rem BiliBody,Rubik,sans-serif;color:var(--muted);margin:4px 0}
 @media (prefers-reduced-motion:reduce){.stat.low{animation:none}}
+.dot{background:var(--bad);color:#fff;font-size:.65rem;border-radius:8px;padding:1px 5px;margin-left:-3px;position:relative;top:-8px}
+.chat{display:flex;flex-direction:column;gap:6px;max-height:46vh;overflow:auto;margin-bottom:8px;padding:2px}
+.msg{background:var(--tile-2);border:2px solid var(--ink);border-radius:12px 12px 12px 2px;padding:6px 10px;max-width:85%;font-size:.95rem}
+.msg b{display:block;font-size:.72rem;color:var(--muted);font-weight:500}
+.msg.me{align-self:flex-end;background:var(--tape);color:#14213D;border-radius:12px 12px 2px 12px}
+.msg.card{font-size:1.1rem}
+.voice{all:unset;cursor:pointer;font-weight:500}
+.ach div svg{width:72px;height:84px;display:block;margin:0 auto}
+.looks{display:grid;grid-template-columns:1fr 1fr;gap:6px}.looks button{margin:0;font-size:.85rem;padding:8px}
+.looks button.on{background:var(--tape);color:#14213D}
+.tabs{display:flex;gap:5px;position:sticky;top:calc(env(safe-area-inset-top,0px) + 58px);z-index:4;background:var(--bg);padding:6px 0 4px}
+.tabs button{all:unset;flex:1;min-width:0;display:flex;flex-direction:column;align-items:center;gap:2px;padding:6px 2px 5px;border:2px solid var(--ink);border-radius:10px;background:var(--surface);color:var(--muted);cursor:pointer;position:relative;-webkit-tap-highlight-color:transparent}
+.tabs b{font-size:1.15rem;line-height:1;font-weight:400}
+.tabs span{font:500 .7rem/1 BiliBody,Rubik,sans-serif;white-space:nowrap}
+.tabs button.on{background:var(--tape);color:#14213D;box-shadow:2px 2px 0 var(--ink)}
+.tabs button:focus-visible{outline:2px solid var(--cobalt);outline-offset:2px}
+.tabs i{position:absolute;top:-7px;right:-3px;background:var(--bad);color:#fff;font:700 .65rem/1.4 BiliBody,Rubik,sans-serif;font-style:normal;border-radius:8px;padding:0 5px}
+[hidden]{display:none!important}
+@media (hover:hover) and (pointer:fine){
+  .panel button:not(:disabled):not(.voice):hover{filter:brightness(1.06);transform:translate(-1px,-1px);box-shadow:4px 4px 0 var(--ink)}
+  .stat:hover,.gear:hover{opacity:.7}
+  .tabs button:hover{border-color:var(--cobalt);color:var(--ink)}
+  canvas{cursor:crosshair}
+}
+@media (min-width:900px){.wrap{max-width:520px}}
+.keys{display:inline-block;font-size:.8rem;color:var(--muted);margin-left:4px}
 </style>
 </head>
 <body>
@@ -137,7 +170,7 @@ textarea{width:100%;min-height:90px;font:14px monospace;border:2px solid var(--i
   <main id="screen"></main>
 </div>
 <script>
-const APP_VERSION = "1.3.2";
+const APP_VERSION = "1.8.1";
 const GOAL = 5000;
 const WORDS = ["деньги","плитка","стена","ванная","кухня","шов","краска","быстро","хорошо","криво","завтра","спасибо"];
 const GIB = ["шмурдык","тыгыдык","кукурумба","бряк-бряк","фыр-фыр","бульк","трямс","хрюм"];
@@ -152,6 +185,11 @@ const CLIENTS = {
   edik:{name:"Олигарх Эдик",minRep:45,pay:1.9,rush:true,trait:"Платит много, но торопит: −25% времени"},
   mama:{name:"Мама",minRep:999,pay:0,trait:"Самый важный заказчик"},
   gig:{name:"Подработка",minRep:999,pay:1,trait:""},
+  angelika:{name:"Дизайнер Анжелика",minRep:30,pay:1.5,vibe:true,trait:"Оценивает по «вайбу». Ровность — не главное."},
+  sergey:{name:"Сергей «Евроремонт»",minRep:999,pay:1,trait:"Работаю с 1998. Ровнее меня только лазер."},
+  tv:{name:"Телешоу «Ремонт за 24 часа»",minRep:999,pay:1,rush:true,trait:"Камера, мотор! Времени меньше."},
+  objc:{name:"Объект",minRep:999,pay:1,trait:"Объект ждёт. Комиссия — тоже."},
+  oldhouse:{name:"Хозяин старого дома",minRep:999,pay:1,trait:"Дом 1972 года. Под плиткой — сюрпризы."},
   night:{name:"Ночной вызов",minRep:999,pay:1,trait:""},
   nigora:{name:"Соседка Нигора",minRep:999,pay:0,trait:""},
 };
@@ -168,6 +206,7 @@ const JOBS = {
   plumbing:{name:"Сантехника",verb:"Чинить трубы",base:480,req:{tool:"wrench",rep:40},orders:["В {ванная} течёт! {быстро}!!!","Труба на {кухня} поёт по ночам. Сделай {хорошо}.","Соседи снизу уже в лодке. {деньги} дам!"],help:"Тапай по трубам, чтобы повернуть. Собери путь от крана слева до выхода справа, пока вода не поднялась."},
   drywall:{name:"Гипсокартон",verb:"Ставить гипсокартон",base:400,req:{tool:"screwdriver"},orders:["Сделай {стена} из гипсокартона. Ровно!","Перегородку на {кухня}, {быстро}.","{стена} новую хочу. {деньги} {хорошо}."],help:"Лист заваливается. Держи палец с той стороны, куда он падает, пока вкручиваются саморезы."},
   brick:{name:"Кладка кирпича",verb:"Класть кирпич",base:350,req:{rep:15},orders:["Забор из кирпича, {хорошо}!","{стена} кирпичную во дворе. {быстро}!","Кирпич красный, раствор серый, {деньги} {завтра}."],help:"Напарник кидает кирпичи снизу. Лови их кельмой — води пальцем влево-вправо."},
+  matryoshka:{name:"Плитка-матрёшка",special:true,verb:"Отдирать плитку",base:320,help:"Тапай по плиткам, чтобы отбить их. Под каждым слоем — ещё слой… Нижние слои крепче."},
   courier:{name:"Курьер",gig:true,base:150,help:"Тапай слева или справа, чтобы сменить полосу. Уворачивайся от луж, голубей и бабушек."},
   sweep:{name:"Дворник",gig:true,base:120,help:"Сметай пальцем всё, что лежит на дворе. Ветер приносит ещё!"},
   mover:{name:"Грузчик",gig:true,base:170,help:"Несёте диван по лестнице. На повороте жми на ту сторону экрана, куда показывает стрелка."},
@@ -219,7 +258,6 @@ const EVENTS = [
   {t:"Мама прислала фото кота. Кот толстый и счастливый.",h:8},
   {t:"Сосед по комнате храпит как перфоратор.",h:-6},
   {t:"Кто-то в маршрутке улыбнулся Билибиджону.",h:5},
-  {t:"Голубь украл лепёшку. Прямо из рук.",h:-5},
 ];
 const HELPER_LINES = [
   "Фарход рассказал анекдот. Никто не понял, но смеялись все.",
@@ -260,10 +298,36 @@ const ACH = {
   papers:["📄","Все печати собраны","Получить патент"],
   window3:["🪟","Окно номер 3","Дойти до окна, отбив 3 «только спросить»"],
   legal:["✅","Всё по закону","Пройти проверку документов"],
+  pigeon:["🕊️","Гроза голубей","Найти гнездо голубя-рецидивиста"],
+  catseen:["🐈","Кот видел всё","Встретить кота заказчика 7 раз"],
+  asmr:["🎧","Плиточный ASMR","ASMR-ролик в трендах"],
+  blogger:["📹","Блогер-плиточник","1000 подписчиков"],
+  nod:["🙂","Мастер кивка","Кивнуть заказчику 30 раз"],
+  treasure:["💎","Заначка Валеры","Найти клад на объекте"],
+  son:["💌","Хороший сын","Ответить маме 10 раз"],
+  haggle:["🤝","Торговец","Выторговать +30%"],
+  secret:["🔐","Секретный код","Найти секретный код"],
+  commute:["🚐","Тетрис-мастер","Втиснуться в маршрутку"],
+  nigora8:["👩‍🍳","Как родная","Нигора подружилась с мамой"],
+  sergey:["😤","Ровнее Сергея","Выиграть у Сергея 3 дуэли"],
+  kitten:["🐱","Котик в общаге","Забрать котёнка"],
+  tv:["🎬","Звезда экрана","Пройти телешоу на 75%+"],
+  wedding:["💍","Лучший тост","Сказать тост на свадьбе брата"],
+  nardy:["🎲","Обыграл Рустама","Выиграть в нарды 3 раза"],
+  party:["🎉","Душа общаги","Дружба с соседями 5"],
+  parcel:["📦","Посылка из дома","Получить посылку от мамы"],
+  matryoshka:["🪆","Плитка-матрёшка","Добраться до 7-го слоя"],
+  wall:["🧱","Говорящая стена","Поговорить со стеной"],
+  dream:["💤","Сладкий сон","Увидеть сон Билибиджона"],
+  company:["🏢","Бизнесмен","Открыть свою фирму"],
+  dayoff:["🌳","Заслуженный отдых","Взять выходной"],
+  obj_m:["🏠","Объект сдан","Сдать средний объект комиссии"],
+  obj_b:["🏬","Большая стройка","Сдать большой объект комиссии"],
+  com100:["🧐","Укротитель комиссии","Ответить всей комиссии так, как им нравится"],
 };
 
 let S, EV={type:null};
-function fresh(){return {day:1,money:200,happy:70,rep:30,sent:0,words:[],tools:[],xp:{},tol:0,nasActive:false,nasBought:false,nasStreak:0,withdraw:false,called:false,learned:false,ate:null,hungry:false,strong:false,helper:false,quest:null,finale:false,won:false,endless:false,recorded:false,docs:{patent:0,reg:0,med:false,exam:false,had:false},strikes:0,docGrace:5,mig:null,lastBackup:0,backupSnooze:0,eve:{},project:null,tired:false,nightPending:false,phase:"morning",log:[],mnotes:[],offers:null,result:null,over:null,stats:{calls:0,pies:0,jobs:0,earned:0,nigora:0,types:[]},ach:[],settings:{sound:true,music:false,vibe:true}};}
+function fresh(){return {day:1,money:200,happy:70,rep:30,sent:0,words:[],tools:[],xp:{},tol:0,nasActive:false,nasBought:false,nasStreak:0,withdraw:false,called:false,learned:false,ate:null,hungry:false,strong:false,helper:false,quest:null,finale:false,won:false,endless:false,recorded:false,obj:null,com:null,comPending:null,sergey:{w:0,l:0},sergeyBonus:false,kitten:false,kittenOffered:false,kittenPending:false,show:null,weddingDone:false,dorm:0,crew:{shukhrat:false,dilshod:false},wallTalked:false,company:null,pigeon:0,nestFound:false,phone:{msgs:[{f:"mama",t:"Сынок, долетел? Позвони, как устроишься! 🙏",d:1}],unread:1,ask:null,photo:false},reviews:[],blog:{followers:0,best:0,today:false},look:{helmet:"yellow",vest:"orange"},codes:[],rodeToday:false,late:false,mini:null,docs:{patent:0,reg:0,med:false,exam:false,had:false},strikes:0,docGrace:5,mig:null,lastBackup:0,backupSnooze:0,eve:{},project:null,tired:false,nightPending:false,phase:"morning",log:[],mnotes:[],offers:null,result:null,over:null,stats:{calls:0,pies:0,jobs:0,earned:0,nigora:0,types:[]},ach:[],settings:{sound:true,music:false,vibe:true}};}
 function save(){try{localStorage.setItem("bilibidjon",JSON.stringify(S))}catch(e){}}
 function load(){try{const r=localStorage.getItem("bilibidjon");if(r)return JSON.parse(r)}catch(e){}return null}
 const $ = s => document.querySelector(s);
@@ -338,17 +402,14 @@ function sprite(m){
     <ellipse cx="58" cy="131" rx="34" ry="4" fill="#000" opacity=".18"/>
     <rect x="40" y="110" width="12" height="20" rx="3" fill="#2E4A7A"/><rect x="64" y="110" width="12" height="20" rx="3" fill="#2E4A7A"/>
     <rect x="36" y="126" width="18" height="7" rx="3" fill="#3A2A1E"/><rect x="62" y="126" width="18" height="7" rx="3" fill="#3A2A1E"/>
-    <rect x="32" y="82" width="52" height="34" rx="10" fill="#FF8A1F" stroke="#14213D" stroke-width="2.5"/>
-    <path d="M38 96h40M38 104h40" stroke="#F4F4F0" stroke-width="4"/>
+    ${vestSvg()}
     <path d="M32 90q-12 10-6 22" stroke="#E8B48A" stroke-width="8" fill="none" stroke-linecap="round"/>
     <path d="M84 90q12 6 10 18" stroke="#E8B48A" stroke-width="8" fill="none" stroke-linecap="round"/>
     <path d="M92 108l14-6l2 5l-14 6z" fill="#B8C2CC" stroke="#14213D" stroke-width="2"/><rect x="88" y="106" width="8" height="5" rx="2" fill="#7A4B2A"/>
     <circle cx="58" cy="60" r="27" fill="#E8B48A" stroke="#14213D" stroke-width="2.5"/>
     <circle cx="40" cy="68" r="4" fill="#F08A7A" opacity=".55"/><circle cx="76" cy="68" r="4" fill="#F08A7A" opacity=".55"/>
     ${eyes}${mouth}
-    <path d="M29 46q0-26 29-26t29 26z" fill="#FFC93C" stroke="#14213D" stroke-width="2.5"/>
-    <rect x="24" y="43" width="68" height="7" rx="3" fill="#FFC93C" stroke="#14213D" stroke-width="2.5"/>
-    <rect x="54" y="22" width="8" height="21" rx="3" fill="#F2B21C"/>
+    ${helmetSvg()}
     ${m==='nas'?'<text x="96" y="30" font-size="16">✨</text>':''}${m==='dizzy'?'<text x="88" y="26" font-size="16">💫</text>':''}
   </svg>`;
 }
@@ -387,14 +448,15 @@ function renderStats(){
     <button class="stat ${h<30?'low':''}" data-tip="happy" aria-label="${tips.happy}">${face}<span class="mini"><i style="width:${h}%;background:${h<30?'var(--bad)':'var(--good)'}"></i></span></button>
     <button class="stat" data-tip="rep" aria-label="${tips.rep}">⭐<span class="mini"><i style="width:${r}%;background:var(--cobalt)"></i></span></button>
     <button class="stat" data-tip="home" aria-label="${tips.home}">🏡 ${Math.round(pct)}%</button>
+    <button class="stat" id="phoneBtn" aria-label="Телефон${S.phone.unread?", новых сообщений: "+S.phone.unread:""}">📱${S.phone.unread?`<span class="dot">${S.phone.unread}</span>`:""}</button>
     <button class="gear" id="set" aria-label="Настройки">⚙️</button>`;
   el.querySelectorAll("[data-tip]").forEach(b=>b.onclick=()=>toast(tips[b.dataset.tip]));
-  $("#set").onclick=openSettings;
+  $("#set").onclick=openSettings;$("#phoneBtn").onclick=openPhone;
 }
 function render(){
   renderStats();checkAch();save();
   if(S.over) return renderOver();
-  ({morning:renderMorning,work:renderWork,result:renderResult,evening:renderEvening,migration:renderMigration})[S.phase]();
+  ({morning:renderMorning,work:renderWork,result:renderResult,evening:renderEvening,migration:renderMigration,mini:renderMini,commission:renderCommission})[S.phase]();
   window.scrollTo(0,0);
   showUpdate();
 }
@@ -410,22 +472,35 @@ const GIG_NOTES={
 };
 function unlocked(k){const r=JOBS[k].req;if(!r)return true;return !(r.rep&&S.rep<r.rep)&&!(r.tool&&!has(r.tool));}
 function reqText(k){const r=JOBS[k].req||{},p=[];if(r.tool&&!has(r.tool))p.push(TOOLS.find(t=>t.id===r.tool).name.toLowerCase());if(r.rep&&S.rep<r.rep)p.push("репутация "+r.rep);return p.join(" + ");}
-function startJob(j){S.job=j;S.mnotes=[];S.phase="work";Snd.step();render();}
+function startJob(j){
+  S.job=j;S.mnotes=[];
+  if(!j.gig&&!j.night&&!j.nigora&&!j.finale&&!S.rodeToday&&Math.random()<.25){S.rodeToday=true;S.phase="mini";S.mini={kind:"commute"};Snd.step();return render();}
+  S.phase="work";Snd.step();render();
+}
 function makeOffers(){
   if(S.finale&&!S.won){S.offers=[{type:"tile",client:"mama",text:"Сынок, дом готов. Осталась ванная. Положи плитку сам, только ровно! И поешь.",base:0,finale:true}];return;}
-  if(S.project){const i=S.project.i,type=S.project.types[i];S.offers=[{type,client:"edik",project:true,raw:true,base:0,color:rnd(PAINTS),text:`Этап ${i+1} из 3: ${JOBS[type].name.toLowerCase()}. Эдик смотрит на часы.`}];return;}
+  if(S.project){const i=S.project.i,type=S.project.types[i];S.offers=[{type,client:"edik",project:true,raw:true,base:0,color:rnd(PAINTS),text:`Этап ${i+1} из 3: ${JOBS[type].name.toLowerCase()}. Требование Эдика: «${(S.project.dem||EDIK_DEMANDS)[i]}»`}];return;}
+  if(S.obj){const O=S.obj,t=O.st[O.i];S.offers=[{type:t,client:"objc",obj:true,raw:true,base:0,color:rnd(PAINTS),text:`${O.e} ${O.name}: этап ${O.i+1} из ${O.st.length} — ${JOBS[t].name.toLowerCase()}.`}];return;}
   const pool=Object.keys(CLIENTS).filter(k=>CLIENTS[k].minRep<=S.rep&&(patentOk()||!["edik","kristina"].includes(k)));
-  const types=Object.keys(JOBS).filter(k=>!JOBS[k].gig&&unlocked(k)).sort(()=>Math.random()-.5);
+  const types=workTypes().sort(()=>Math.random()-.5);
+  {const pref=SEASON_JOBS[season()].filter(t=>types.includes(t));if(pref.length&&Math.random()<.6){const t=rnd(pref);types.splice(types.indexOf(t),1);types.unshift(t);}}
   const mk=(type,rec)=>{const client=rnd(pool);
-    const text=client==="arseniy"&&type==="tile"?"{плитка} {криво}, это стиль! {деньги} дам.":rnd(JOBS[type].orders);
+    const text=client==="angelika"?"Здесь нужно больше воздуха. Ты чувствуешь {стена}? Сделай {хорошо}.":client==="arseniy"&&type==="tile"?"{плитка} {криво}, это стиль! {деньги} дам.":rnd(JOBS[type].orders);
     return {type,client,text,base:JOBS[type].base,color:rnd(PAINTS),rec};};
   S.offers=[mk(types[0]),mk(types[1])];
   if(S.rep>=60)S.offers.push(mk(types[2],true));
   if(S.rep>=60&&S.day>=5&&patentOk()&&Math.random()<.25)S.offers.push({special:"project"});
+  if(S.day>=6&&patentOk()&&Math.random()<.15)S.offers.push({special:"duel"});
+  if(S.day>=8&&S.rep>=50&&patentOk()&&Math.random()<.12)S.offers.push({special:"show"});
+  if(S.day>=4&&Math.random()<.08)S.offers.push({special:"matr"});
+  if(patentOk()){if(S.day>=4&&S.rep>=25&&Math.random()<.25)S.offers.push({special:"obj",size:"medium",o:rnd(OBJECTS.medium)});
+    else if(S.day>=10&&S.rep>=55&&crewCount()>=1&&Math.random()<.15)S.offers.push({special:"obj",size:"big",o:rnd(OBJECTS.big)});}
+  if(S.day>=6&&S.rep<70&&S.offers.filter(o=>!o.special).length>2&&Math.random()<.15){S.offers.splice(0,1);S.mnotes.push("😎 Сергей «Евроремонт» перебил один заказ: «Работаю с 1998, а этот только приехал».");}
+  if(S.sergeyBonus){S.sergeyBonus=false;S.offers.unshift(mk(types[0],true));S.mnotes.push("🏆 Клиент Сергея «Евроремонт» пришёл к тебе после дуэли!");}
 }
 function startProject(){
-  const types=Object.keys(JOBS).filter(k=>!JOBS[k].gig&&unlocked(k)).sort(()=>Math.random()-.5).slice(0,3);
-  S.project={types,i:0,scores:[]};S.offers=null;makeOffers();startJob(S.offers[0]);
+  const types=workTypes().sort(()=>Math.random()-.5).slice(0,3);
+  S.project={types,i:0,scores:[],dem:shuffle(EDIK_DEMANDS).slice(0,3)};S.offers=null;makeOffers();startJob(S.offers[0]);
 }
 function renderMorning(){
   if(!S.offers) makeOffers();
@@ -438,6 +513,7 @@ function renderMorning(){
   if(S.strong) notes.push("После шашлыка Билибиджон чувствует силу. Сегодня всё получится.");
   if(S.helper) notes.push("Помощник Фарход на месте. Работа пойдёт легче.");
   if(S.project) notes.push(`🏗️ Ремонт у Эдика: этап ${S.project.i+1} из 3. Другие заказы подождут.`);
+  if(S.obj) notes.push(`${S.obj.e} ${S.obj.name}: этап ${S.obj.i+1} из ${S.obj.st.length}. Оплата до ${S.obj.pay}₽ — после комиссии.`);
   if(S.quest) notes.push(`💍 ${S.quest.text}: ${S.quest.need}₽ до ${S.quest.deadline}-го дня.`);
   if(!S.docs.had&&S.day<=3) notes.push("🏢 Билибиджон только приехал. Нужно оформить патент в миграционном центре (медкомиссия, экзамен по языку — 6 слов, анкета) и вечером регистрацию у коменданта. Проверки начнутся через несколько дней.");
   if(S.day>=(S.docGrace||5)){
@@ -446,18 +522,17 @@ function renderMorning(){
     if(!regOk()) notes.push("❗ Регистрации нет — оформи вечером у коменданта.");
   }
   $("#screen").innerHTML = `
+    ${iosCard()}${notifyCard()}
     <div class="panel">
       <h1>${S.finale&&!S.won?"Последний заказ":"Малютка Билибиджон"}</h1>
       <div class="tape"></div>
       ${hero(S.finale&&!S.won?"Мама, я лечу!":null)}
-      <p>Утро ${S.day}-го дня. ${S.finale&&!S.won?"Билибиджон приехал домой на один день.":"У стройки ждут заказчики. Билибиджон кивает. Билибиджон всегда кивает."}</p>
+      <p>${SEASONS[season()][1]} ${SEASONS[season()][0]}, утро ${S.day}-го дня. ${S.finale&&!S.won?"Билибиджон приехал домой на один день.":"У стройки ждут заказчики. Билибиджон кивает. Билибиджон всегда кивает."}</p>
       ${notes.map(m=>`<p class="log">${m}</p>`).join("")}
       <p class="who">Версия ${APP_VERSION}${S.endless?" · бесконечная карьера":""}</p>
     </div>
     ${S.offers.map((o,i)=>{
-      if(o.special==="project")return `<div class="panel"><div class="who">Олигарх Эдик · особый заказ<span class="tag">3 дня</span></div>
-        <p class="log">Ремонт под ключ: три работы, по одной в день. 1800₽ в конце, но если хоть одна провалится — Эдик недоволен всем.</p>
-        <div class="quote">${say("Сделай мне всё {хорошо}! {деньги} много!")}</div><button data-p="1">Взять ремонт под ключ<small>Следующие 3 дня — только Эдик</small></button></div>`;
+      if(o.special)return specialCard(o,i);
       const C=CLIENTS[o.client];return `
       <div class="panel">
         <div class="who">${C.name}${o.rec?'<span class="tag">по рекомендации +20%</span>':''}${o.project?'<span class="tag">ремонт под ключ</span>':''} · ${JOBS[o.type].name.toLowerCase()}${o.type==='paint'?' · цвет '+o.color:''}</div>
@@ -465,9 +540,14 @@ function renderMorning(){
         <div class="quote">${o.finale||o.raw?o.text:say(o.text)}</div>
         <p>Оплата: <b>${o.finale?"Бесплатно. Это же мама.":o.project?"1800₽ после всех этапов":S.words.includes("деньги")?Math.round(o.base*C.pay*(o.rec?1.2:1))+"₽ за идеальную работу":"<span class='gib'>"+rnd(GIB)+"</span> ₽"}</b></p>
         <button data-o="${i}">${JOBS[o.type].verb}<small>${o.finale?"Положить плитку маме":"Кивнуть и взяться за работу"}</small></button>
-      </div>`;}).join("")}${migCard()}`;
+        ${canHaggle(o)?`<button data-h="${i}">🤝 Торговаться<small>Поднять цену, пока у заказчика есть терпение</small></button>`:o.haggled?'<p class="log">🤝 Цена согласована</p>':""}
+      </div>`;}).join("")}${migCard()}${dayOffCard()}`;
   document.querySelectorAll("[data-o]").forEach(b=>b.onclick=()=>startJob(S.offers[+b.dataset.o]));
   const mg=$("#migGo");if(mg)mg.onclick=goMigration;
+  const ny=$("#nfYes");if(ny)ny.onclick=toggleNotify;const nn=$("#nfNo");if(nn)nn.onclick=()=>{S.settings.notifyAsked=true;save();render();};
+  const ih=$("#iosHow");if(ih)ih.onclick=installApp;const io=$("#iosNo");if(io)io.onclick=()=>{S.settings.iosHint=true;save();render();};
+  document.querySelectorAll("[data-h]").forEach(b=>b.onclick=()=>haggle(+b.dataset.h));
+  document.querySelectorAll("[data-sp]").forEach(b=>b.onclick=()=>startSpecial(b.dataset.sp));document.querySelectorAll("[data-obj]").forEach(b=>b.onclick=()=>startObject(S.offers[+b.dataset.obj]));const dof=$("#dayoff");if(dof)dof.onclick=dayOff;
   const pb=document.querySelector("[data-p]");if(pb)pb.onclick=startProject;
 }
 
@@ -475,25 +555,25 @@ function renderMorning(){
 function speedMul(t){let m=1;if(S.nasActive)m*=1-.45*nasEff();if(S.withdraw)m*=1.45;if(S.happy<30)m*=1.25;if(S.hungry)m*=1.1;if(S.tired)m*=1.12;if(S.strong)m*=.92;if(has("laser")&&(t==="tile"||t==="wallpaper"))m*=.75;return m/skillF(t);}
 function sizeMul(t){return (S.nasActive?1+.4*nasEff():1)*(S.withdraw?.8:1)*(S.happy<30?.88:1)*(S.hungry?.9:1)*(S.tired?.9:1)*(S.strong?1.1:1)*skillF(t);}
 function shake(){return (S.withdraw?9:0)+(S.happy<30?5:0)+(EV.type==="drill"?6:0);}
-function tm(){return CLIENTS[S.job.client].rush?.75:1}
+function tm(){const j=S.job;let m=CLIENTS[j.client].rush?.75:1;if(!j.gig&&!j.nigora&&S.crew){if(S.crew.shukhrat)m*=1.2;if(S.crew.dilshod)m*=.9;}return m;}
 const EV_TEXT={dark:"⚡ Отключили свет! Иногда темнеет.",drill:"🔨 Сосед сверлит. Всё трясётся.",cat:"🐈 По объекту гуляет кот заказчика."};
 function renderWork(){
   const j=S.job,J=JOBS[j.type],C=CLIENTS[j.client];
   EV={type:null};
   if(j.night&&Math.random()<.5)EV={type:"dark"};
-  else if(!j.finale&&!j.gig&&!j.nigora&&Math.random()<.3){const o=["dark","drill"];if(j.type==="tile"||j.type==="mosaic")o.push("cat");EV={type:rnd(o),catT:4+Math.random()*6,catDone:false,onCat:null};}
-  const title=j.nigora?"Полка для Нигоры":j.night?"Ночной вызов: потоп!":J.name+(j.finale?" для мамы":"")+(j.project?` · этап ${S.project.i+1}/3`:"");
-  const help=j.nigora?"Полка заваливается. Держи палец с той стороны, куда она падает, пока вкручиваются саморезы.":J.help;
+  else if(!j.finale&&!j.gig&&!j.nigora&&Math.random()<.3){const o=["dark","drill","cat"];EV={type:rnd(o),catT:4+Math.random()*6,catDone:false,onCat:null};if(EV.type==="cat"){S.stats.cat=(S.stats.cat||0)+1;if(S.stats.cat>=7)unlock("catseen");if(S.stats.cat>=10&&!S.kittenOffered){S.kittenOffered=true;S.kittenPending=true;}}}
+  const title=j.obj?`${S.obj.e} ${J.name} · этап ${S.obj.i+1}/${S.obj.st.length}`:j.show?`🎬 ${J.name} · этап ${S.show.i+1}/3`:j.duel?`😤 Дуэль: ${J.name}`:j.nigora?(NIGORA_REQ[j.req]||NIGORA_REQ.shelf).title:j.night?"Ночной вызов: потоп!":J.name+(j.finale?" для мамы":"")+(j.project?` · этап ${S.project.i+1}/3`:"");
+  const help=j.nigora?(NIGORA_REQ[j.req]||NIGORA_REQ.shelf).help:J.help;
   $("#screen").innerHTML = `
     <div class="panel">
       <h2>${j.gig?GIG_E[j.type]+" ":""}${title}</h2>
-      <p class="log">${help}${C.rush?" Эдик стоит над душой: времени меньше.":""}${C.crooked&&j.type==="tile"?" Арсению нужно КРИВО. Жми, когда пузырёк у краёв!":""}</p>
-      ${EV.type?`<p class="ev">${EV_TEXT[EV.type]}</p>`:""}
+      <p class="log">${help}${C.rush?" Эдик стоит над душой: времени меньше.":""}${C.crooked&&j.type==="tile"?" Арсению нужно КРИВО. Жми, когда пузырёк у краёв!":""}${keyHint(j.type)}</p>
+      ${EV.type?`<p class="ev">${evText()}</p>`:""}
       <div class="hud"><span id="tm">--</span><span id="sc">0%</span></div>
       <canvas id="cv"></canvas>
     </div>`;
   ({tile:tileGame,putty:puttyGame,grout:groutGame,paint:paintGame,cut:cutGame,mosaic:mosaicGame,wallpaper:wallGame,
-    laminate:laminateGame,electric:electricGame,plumbing:plumbingGame,drywall:()=>drywallGame(!!j.nigora),brick:brickGame,
+    laminate:laminateGame,electric:electricGame,plumbing:plumbingGame,matryoshka:matrGame,drywall:()=>drywallGame(j.nigora?(j.req==="lamp"?"lamp":"shelf"):false),brick:brickGame,
     courier:courierGame,sweep:sweepGame,mover:moverGame,carwash:carwashGame,warehouse:warehouseGame})[j.type]();
 }
 function evTick(c,w,h,t,cv){
@@ -631,7 +711,7 @@ function paintGame(){
 /* ---------- резка плитки ---------- */
 function cutGame(){
   const cv=$("#cv"),{c,w,h}=setupCanvas(cv,.85);
-  const N=3,dur=3.2/speedMul("cut")*tm(),tol=16*sizeMul("cut")*(has("cutter")?1.4:1);
+  const N=S.job.nigora?1:3,dur=(S.job.nigora?3.8:3.2)/speedMul("cut")*tm(),tol=16*sizeMul("cut")*(has("cutter")?1.4:1);
   let idx=0,start=0,errSum=0,n=0,trail=[],cy=h/2,scores=[];
   const mkLine=()=>({y0:h*.28+Math.random()*h*.44,y1:h*.28+Math.random()*h*.44});let L=mkLine();
   const setY=e=>{const b=cv.getBoundingClientRect();cy=e.clientY-b.top;};
@@ -709,7 +789,7 @@ function laminateGame(){
 /* ---------- электрика ---------- */
 function electricGame(){
   const cv=$("#cv"),{c,w,h}=setupCanvas(cv,1.1);
-  const COLS=["#C8352E","#1F4FA8","#FFC93C","#1E8A5A"],R=3;let round=0,correct=0,wrong=0,links=[],right=[],drag=null,spark=0;
+  const COLS=["#C8352E","#1F4FA8","#FFC93C","#1E8A5A"],R=S.job.nigora?1:3;let round=0,correct=0,wrong=0,links=[],right=[],drag=null,spark=0;
   const newRound=()=>{links=[];right=[0,1,2,3].sort(()=>Math.random()-.5);};newRound();
   const ly=i=>50+i*(h-100)/3,lx=36,rx=w-36;
   const pos=e=>{const b=cv.getBoundingClientRect();return [e.clientX-b.left,e.clientY-b.top]};
@@ -732,7 +812,7 @@ function electricGame(){
 /* ---------- сантехника ---------- */
 function plumbingGame(){
   const cv=$("#cv"),{c,w,h}=setupCanvas(cv,1.15);
-  const N=4,pad=22,cs=(w-pad*2)/N,oy=(h-cs*N)/2+8,T=24*tm();
+  const N=4,pad=22,cs=(w-pad*2)/N,oy=(h-cs*N)/2+8,T=(S.job.nigora?36:24)*tm();
   const rot=m=>((m<<1)|(m>>3))&15,OPP={1:4,4:1,2:8,8:2};
   const seq=[];let r=Math.floor(Math.random()*N);const r0=r;
   for(let col=0;col<N;col++){const rt=Math.floor(Math.random()*N),st=rt>=r?1:-1;for(let y=r;;y+=st){seq.push([col,y]);if(y===rt)break;}r=rt;}
@@ -761,26 +841,30 @@ function plumbingGame(){
 /* ---------- гипсокартон / полка ---------- */
 function drywallGame(short){
   const cv=$("#cv"),{c,w,h}=setupCanvas(cv,1);
-  const D=(short?8:13)*tm(),screws=short?4:6,inst=1.9*speedMul("drywall"),noise=1.3*(1+shake()/12);
+  const easy=!!short,D=(short?8:13)*tm(),screws=short?4:6,inst=(easy?.15:1.5)*speedMul("drywall"),noise=(easy?.9:1)*(1+shake()/12),FALL=easy?1:.75,OKA=easy?.45:.35,DAMP=easy?.95:.985;
   let ang=(Math.random()-.5)*.12,vel=0,ctrl=0,sum=0,n=0,fell=false,last=0;
   const setC=e=>{const b=cv.getBoundingClientRect();ctrl=clamp((e.clientX-b.left-w/2)/(w/2),-1,1);};
   cv.onpointerdown=e=>{cv.setPointerCapture(e.pointerId);setC(e)};cv.onpointermove=e=>{if(e.buttons||e.pointerType==="touch")setC(e)};cv.onpointerup=cv.onpointercancel=()=>ctrl=0;
   timer(D,t=>{const dt=Math.min(.05,t-last);last=t;
-    vel+=(ang*inst*3+(Math.random()-.5)*noise*3-ctrl*3.2)*dt;vel*=.985;ang+=vel*dt;if(Math.abs(ang)>.7)fell=true;
-    sum+=1-Math.min(1,Math.abs(ang)/.35);n++;const sd=Math.min(screws,Math.floor(t/D*(screws+.5)));
+    vel+=(ang*inst*3+(Math.random()-.5)*noise*3-ctrl*3.2)*dt;vel*=DAMP;ang+=vel*dt;if(Math.abs(ang)>FALL)fell=true;
+    sum+=1-Math.min(1,Math.abs(ang)/OKA);n++;const sd=Math.min(screws,Math.floor(t/D*(screws+.5)));
     $("#sc").textContent=sd+" / "+screws+" саморезов";
     c.fillStyle="#CFC9BE";c.fillRect(0,0,w,h);c.fillStyle="#8E8A84";c.fillRect(0,h*.86,w,h);
+    if(short==="lamp"){c.save();c.translate(w/2,h*.12);c.rotate(ang);c.strokeStyle="#14213D";c.lineWidth=3;c.beginPath();c.moveTo(0,0);c.lineTo(0,h*.3);c.stroke();
+      c.fillStyle="#FFC93C";c.beginPath();c.ellipse(0,h*.36,w*.2,h*.07,0,0,7);c.fill();c.stroke();c.font="22px sans-serif";c.textAlign="center";c.fillText("💡",-w*.1,h*.5);c.fillText("💡",w*.1,h*.5);c.textAlign="start";
+      c.fillStyle="#14213D";for(let k=0;k<sd;k++){c.beginPath();c.arc(-12+k*8,4,3,0,7);c.fill();}c.restore();}
+    else{
     c.save();c.translate(w/2,h*.86);c.rotate(ang);
     const sw=short?w*.6:w*.62,sh=short?h*.07:h*.7,sy=short?-h*.45:-sh;
     c.fillStyle=short?"#C99A5B":"#E9E6DF";c.strokeStyle="#14213D";c.lineWidth=3;c.fillRect(-sw/2,sy,sw,sh);c.strokeRect(-sw/2,sy,sw,sh);
     if(short){c.fillStyle="#7A4B2A";c.fillRect(-sw/2+10,sy+sh,8,h*.45-sh);c.fillRect(sw/2-18,sy+sh,8,h*.45-sh);}
     c.fillStyle="#14213D";for(let k=0;k<sd;k++){const px=-sw/2+sw*((k%3)+.5)/3,py=short?sy+sh/2:sy+sh*(Math.floor(k/3)?.8:.2);c.beginPath();c.arc(px,py,4,0,7);c.fill();}
-    c.restore();
+    c.restore();}
     const lw=w-60;c.fillStyle=css("--tape");c.fillRect(30,12,lw,20);c.strokeStyle=css("--ink");c.lineWidth=2;c.strokeRect(30,12,lw,20);
-    c.fillStyle="rgba(30,138,90,.4)";c.fillRect(30+lw/2-lw*.1,14,lw*.2,16);c.fillStyle="#E8FFF5";c.beginPath();c.arc(30+lw/2+clamp(ang/.7,-1,1)*(lw/2-10),22,8,0,7);c.fill();c.stroke();
+    c.fillStyle="rgba(30,138,90,.4)";c.fillRect(30+lw/2-lw*.1,14,lw*.2,16);c.fillStyle="#E8FFF5";c.beginPath();c.arc(30+lw/2+clamp(ang/FALL,-1,1)*(lw/2-10),22,8,0,7);c.fill();c.stroke();
     evTick(c,w,h,t,cv);return fell;
   },()=>{let q=n?sum/n:0;if(fell)q*=.5;
-    endJob(q,fell?(short?"Полка упала. Нигора смеётся, Билибиджон тоже.":S.helper?"Лист упал на Фарходa. Фарход жив, лист — нет.":"Лист упал Билибиджону на ногу. Нога жива. Лист — нет."):"");});
+    endJob(q,fell?(short==="lamp"?"Люстра повисла на одном проводе. Нигора сказала, что так даже уютнее.":short?"Полка упала. Нигора смеётся, Билибиджон тоже.":S.helper?"Лист упал на Фарходa. Фарход жив, лист — нет.":"Лист упал Билибиджону на ногу. Нога жива. Лист — нет."):"");});
 }
 /* ---------- кирпич ---------- */
 function brickGame(){
@@ -821,7 +905,7 @@ function courierGame(){
 }
 /* ---------- дворник ---------- */
 function sweepGame(){
-  const cv=$("#cv"),{c,w,h}=setupCanvas(cv,1.15),winter=Math.floor(S.day/7)%2===1;
+  const cv=$("#cv"),{c,w,h}=setupCanvas(cv,1.15),winter=season()===3;
   let items=[];const add=k=>{for(let i=0;i<k;i++)items.push({x:12+Math.random()*(w-24),y:12+Math.random()*(h-24),e:Math.random()<.5});};add(40);
   const st={},r=26*sizeMul("sweep");let gust=3,wind=0;
   dragInput(cv,(x,y)=>{const n0=items.length;items=items.filter(o=>(o.x-x)**2+(o.y-y)**2>r*r);if(items.length<n0)Snd.squish();},st);
@@ -899,7 +983,7 @@ function warehouseGame(){
 const B_LINES=["Валера, где деньги?!","Я всё положил ровно!","Мы договаривались!","Мама ждёт перевод!","Плитка итальянская!","Я записал всё в тетрадку!"];
 const V_LINES=["Денег нет, но ты держись","Завтра отдам. Честно.","Это не я, это кризис","Плитка какая-то не такая","У меня кот заболел","Подпиши ещё раз, я потерял"];
 function argueGame(onDone){
-  $("#screen").innerHTML=`<div class="panel"><h2>Спор с прорабом Валерой</h2><p class="log">Жми, когда сжимающийся круг совпадёт с жёлтым кольцом. Каждое попадание — железный аргумент.</p><div class="hud"><span id="tm">--</span><span id="sc">0 / 8</span></div><canvas id="cv"></canvas></div>`;
+  $("#screen").innerHTML=`<div class="panel"><h2>Спор с прорабом Валерой</h2><p class="log">Жми, когда сжимающийся круг совпадёт с жёлтым кольцом. Каждое попадание — железный аргумент.${DESKTOP?" ⌨️ Пробел.":""}</p><div class="hud"><span id="tm">--</span><span id="sc">0 / 8</span></div><canvas id="cv"></canvas></div>`;
   const cv=$("#cv"),{c,w,h}=setupCanvas(cv,.95),N=8,life=1.15*(S.nasActive?1.15:1)*(S.withdraw?.85:1),TR=34;
   let i=0,start=.6,scores=[],line="Валера: «Какие деньги?»",tapped=false,t=0;
   const radius=tt=>110-100*((tt-start)/life);
@@ -922,35 +1006,54 @@ function endJob(q,note){
   q=clamp(q,0,1);const J=S.job,C=CLIENTS[J.client];let notes=[];
   if(note)notes.push(note);
   if(S.helper&&!J.finale&&!J.gig&&!J.nigora){q=Math.min(1,q+(1-q)*.25);notes.push("Фарход подправил огрехи за Билибиджоном.");}
+  if(!J.finale&&!J.gig&&!J.nigora){if(S.crew.dilshod){q=Math.min(1,q+(1-q)*.35);notes.push("Дилшод всё перепроверил. Медленно, но идеально.");}if(S.crew.shukhrat){q=Math.max(0,q-.05);notes.push("Шухрат всё сделал быстро. Кое-где слишком быстро.");}}
   S.xp[J.type]=(S.xp[J.type]||0)+1+(q>.8?1:0);S.stats.jobs++;
   if(!S.stats.types.includes(J.type))S.stats.types.push(J.type);
+  if(J.obj){const O=S.obj;O.scores.push(q);O.i++;
+    if(O.i<O.st.length){notes.push(`${O.e} Этап ${O.i} из ${O.st.length} на объекте ${O.name}: ${Math.round(q*100)}%. Оплата — после комиссии.`);
+      S.result={q,pay:0,notes,dr:0,valeraDone:true,qDone:true,question:null,label:O.name};}
+    else{S.comPending="obj";notes.push(`${O.e} Все работы на объекте ${O.name} закончены! Впереди — приёмочная комиссия.`);
+      S.result={q,pay:0,notes,dr:0,valeraDone:true,qDone:true,question:null,label:O.name,back:"commission"};}
+    S.phase="result";q>.6?Snd.coin():Snd.fail();return render();}
+  if(J.show){const SH=S.show;SH.scores.push(q);SH.i++;
+    if(SH.i<SH.types.length){notes.push(`🎬 Этап ${SH.i} из 3: ${Math.round(q*100)}%. Ведущий: «${rnd(TV_LINES)}»`);S.result={q,pay:0,notes,dr:0,valeraDone:true,qDone:true,question:null,back:"show",label:"Ремонт за 24 часа"};}
+    else{const avg=SH.scores.reduce((a,b)=>a+b,0)/SH.scores.length,pay=Math.round(700*avg),fol=Math.round(3000*avg),dr=Math.round(8*avg-2);
+      S.money+=pay;S.stats.earned+=pay;S.blog.followers+=fol;S.rep=clamp(S.rep+dr,0,100);
+      notes.push(`🎬 Финал шоу! Средний результат ${Math.round(avg*100)}%. Гонорар ${pay}₽ и +${fol} подписчиков.`,avg>.75?"Ведущий плакал. Оператор тоже. Выпуск стал хитом.":"Выпуск смонтировали как комедию. Рейтинги всё равно высокие.");
+      if(avg>=.75)unlock("tv");if(S.blog.followers>=1000)unlock("blogger");S.show=null;
+      S.result={q:avg,pay,notes,dr,valeraDone:true,qDone:true,question:null,label:"Ремонт за 24 часа"};}
+    S.phase="result";q>.6?Snd.coin():Snd.fail();return render();}
+  if(J.duel){const sq=clamp(.55+Math.random()*.3+Math.min(S.day,40)*.003+S.sergey.w*.02,0,.97),win=q>sq,pay=win?Math.round(250+150*q):0,dr=win?6:-3;
+    S.money+=pay;S.stats.earned+=pay;S.rep=clamp(S.rep+dr,0,100);
+    notes.push(`😤 Сергей: ${Math.round(sq*100)}%. Билибиджон: ${Math.round(q*100)}%.`,win?`Победа! Сергей сказал «просто повезло» и уехал на своей машине с наклейкой «Евроремонт». +${pay}₽.`:"Поражение. Сергей сфоткался на фоне своей плитки и выложил «до/после» с твоей.");
+    if(win){S.sergey.w++;S.sergeyBonus=true;if(S.sergey.w>=3)unlock("sergey");}else S.sergey.l++;
+    S.result={q,pay,notes,dr,valeraDone:true,qDone:true,question:null,label:"Дуэль с Сергеем",canVideo:!S.blog.today};
+    S.phase="result";win?Snd.fanfare():Snd.fail();return render();}
   if(J.finale){S.won=true;S.over="win";S.result={q};Snd.fanfare();vib([80,60,80,60,200]);unlock("home");return render();}
   if(J.gig||J.nigora){
     let pay=0;
     if(J.gig){pay=Math.round(J.base*q*(1+.03*lvl(J.type)));S.happy=clamp(S.happy-5,0,100);notes.push(GIG_NOTES[J.type](q));if(J.type==="courier"&&q>=.95)unlock("pizza");}
-    else{const hp=Math.round(15*Math.max(.4,q));S.happy=clamp(S.happy+hp,0,100);S.stats.nigora++;
-      notes.push(q>.6?`Полка висит ровно. Нигора сказала «спасибо» и обещала плов со скидкой. Счастье +${hp}.`:`Полка висит… как-то висит. Нигора всё равно рада. Счастье +${hp}.`);if(S.stats.nigora>=3)unlock("nigora");}
+    else nigoraResult(J,q,notes);
     if(J.gig){const ins=inspect(.08);if(ins){notes.push(ins.t);if(!ins.ok)pay=0;}}
     S.money+=pay;S.stats.earned+=pay;
-    S.result={q,pay,notes,dr:0,valeraDone:true,qDone:true,question:null,back:"evening",label:J.gig?JOBS[J.type].name:"Помощь соседке"};
+    S.result={q,pay,notes,dr:0,valeraDone:true,qDone:true,question:null,back:"evening",label:J.gig?JOBS[J.type].name:"Помощь Нигоре"};
     S.phase="result";q>.6?Snd.coin():Snd.fail();return render();
   }
   let pay=0,dr=0;
   if(J.project){
     S.project.scores.push(q);S.project.i++;notes.push(`Этап ${S.project.i} из 3 сделан: ${Math.round(q*100)}%.`);
-    if(S.project.i>=3){const sc=S.project.scores,avg=sc.reduce((a,b)=>a+b,0)/3;
-      if(Math.min(...sc)<.5){pay=Math.round(1800*.3);dr=-6;notes.push("Эдик недоволен ВСЕМ. Даже тем, что было хорошо. Заплатил 30%.");}
-      else{pay=Math.round(1800*avg*(.8+S.rep/250));dr=8;notes.push(`Ремонт под ключ сдан! Эдик расчувствовался и заплатил ${pay}₽.`);unlock("edikpro");}
-      S.project=null;}
+    if(S.project.i>=3){S.comPending="project";notes.push("🏗️ Все этапы готовы. Эдик позвал приёмочную комиссию. «Лучших специалистов», говорит.");}
     else notes.push("Эдик кивнул. Оплата — после всех этапов.");
   } else {
-    pay=Math.round(J.base*C.pay*(J.rec?1.2:1)*q*(1+.04*S.words.length)*(.8+S.rep/250));
+    if(C.vibe){const v=.3+Math.random()*.7;q=clamp(.4*q+.6*v,0,1);notes.push(`Анжелика: «${v>.75?"Это ВАЙБ! Столько воздуха!":v>.5?"Хм… вайб есть, но не тот. Где воздух?":"Нет вайба. Совсем. Стена не дышит."}»`);}
+    pay=Math.round(J.base*C.pay*(J.rec?1.2:1)*q*(1+.04*S.words.length)*(.8+S.rep/250)*(S.blog.followers>=1000?1.05:1)*(season()===3&&["plumbing","electric"].includes(J.type)?1.2:1));
     if(C.valera&&!patentOk()){pay=Math.round(pay*.75);notes.push("Валера взял без патента, но «за риск» срезал четверть оплаты.");}
     const room=/\{(ванная|кухня)\}/.exec(J.text||"");
     if(room&&!S.words.includes(room[1])&&Math.random()<.35){pay=Math.round(pay*.5);notes.push(`Билибиджон всё сделал отлично. Только не в той комнате (заказчик говорил «${room[1]}»).`);}
     if(C.rush){if(q>=.8)unlock("edik");if(q<.5){pay=Math.round(pay*.5);notes.push("Эдику не понравилось. Он заплатил половину и купил себе ещё одну яхту.");}else notes.push("Эдик доволен и щедр. Почти как в кино.");}
     if(C.pies){S.happy=clamp(S.happy+12,0,100);S.stats.pies++;if(!S.ate)S.ate="pies";notes.push("Бабушка Зина доплатила пирожками. Ужин есть, счастье +12.");}
     if(C.crooked&&J.type==="tile"&&q>.7)unlock("hipster");
+    if(!S.ate&&(S.stats.nigora||0)>=6&&Math.random()<.2){S.ate="plov";notes.push("🍚 Нигора принесла на объект обед в контейнере. Ужин уже есть!");}
     dr=(q-.55)*16*(C.blog?3:1);
     if(C.blog){if(q>.75){notes.push("Ролик «Плиточник от бога» набрал миллион просмотров!");unlock("viral");}else if(q<.45)notes.push("Ролик «Худший ремонт года» в трендах. Ой.");}
     if(J.night){S.nightPending=true;dr=Math.max(dr,2);notes.push(q>.6?"Потоп остановлен в 3:40 ночи. Соседи снизу прислали торт.":"Вода остановилась сама. Когда кончилась.");if(q>.6)unlock("night");}
@@ -958,12 +1061,15 @@ function endJob(q,note){
     if(q>.9)notes.push("Работа идеальная. Заказчик сказал «спасибо» и что-то ещё, очень длинное.");
   }
   S.rep=clamp(S.rep+dr,0,100);
+  if(S.late){pay=Math.round(pay*.85);notes.push("🚐 Опоздал — маршрутка уехала без него. Оплата −15%.");S.late=false;}
+  if(!J.project&&Math.random()<.01){pay+=300;S.stats.treasure=(S.stats.treasure||0)+1;unlock("treasure");notes.push("💎 Под старой плиткой нашёлся клад: 300₽! …Это заначка Валеры. Валера пока не знает.");}
   if(!J.night){const ins=inspect(C.valera?.25:.18);if(ins){notes.push(ins.t);if(!ins.ok)pay=0;}}
   let valera=0;if(C.valera&&pay>0&&Math.random()<.45){valera=Math.round(pay*.4);pay-=valera;}
   S.money+=pay;S.stats.earned+=pay;
   const ask=!C.valera&&!J.night&&!J.project&&Math.random()<.45;
   S.result={q,pay,notes,dr,valera,valeraDone:!valera,question:ask?Math.floor(Math.random()*QUESTIONS.length):null,qText:null,back:J.night?"sleep":null,label:J.night?"Ночной вызов":null};
   S.result.qDone=S.result.question===null;
+  S.result.review=addReview(J,C,q);if(J.type==="putty"&&!S.wallTalked&&S.stats.jobs>=5&&Math.random()<.25){S.wallTalked=true;S.result.wall=0;}S.result.canVideo=!J.night&&!S.blog.today;if(S.comPending==="project"){S.result.back="commission";S.result.question=null;S.result.qDone=true;S.result.valera=0;S.result.valeraDone=true;}
   S.phase="result";q>.6?Snd.coin():(Snd.fail(),vib(150));
   render();
 }
@@ -984,9 +1090,15 @@ function renderResult(){
       <p class="big ${r.q>.7?'good':r.q<.4?'bad':''}">${Math.round(r.q*100)}%</p>
       <p>Качество работы. Заработано: <b>${r.pay}₽</b>${r.back==="evening"?"":` · репутация ${r.dr>=0?"+":""}${Math.round(r.dr)}`}</p>
       ${r.notes.map(n=>`<p class="log">${n}</p>`).join("")}
+      ${r.wall!=null?wallHtml(r):""}
+      ${r.review?`<p class="log">⭐ Новый отзыв · <b>${esc(r.review.c)}</b> <span style="color:var(--tape)">${stars(r.review.s)}</span> «${esc(r.review.t)}»</p>`:""}
+      ${r.video?`<p class="log">📹 Ролик${r.video.asmr?" «Плиточный ASMR»":""}: ${r.video.v.toLocaleString("ru-RU")} просмотров${r.video.viral?" — 🔥 В ТРЕНДАХ! Репутация +5":""}. +${r.video.gain} подписчиков. Топ-коммент: ${r.video.c}</p>`:""}
+      ${r.canVideo?`<button id="vid">📹 Снять ролик с объекта<small>Блог Билибиджона · подписчиков: ${S.blog.followers.toLocaleString("ru-RU")}</small></button>`:""}
     </div>
     ${extra}
-    <div class="panel"><button class="main" id="go" ${blocked?"disabled":""}>${r.back==="evening"?"Вернуться в общежитие":r.back==="sleep"?"Досыпать 😴":"Домой, в общежитие"}</button></div>`;
+    <div class="panel"><button class="main" id="go" ${blocked?"disabled":""}>${r.back==="commission"?"🧐 К приёмочной комиссии":r.back==="evening"?"Вернуться в общежитие":r.back==="sleep"?"Досыпать 😴":"Домой, в общежитие"}</button></div>`;
+  const wb=$("#wallBtn");if(wb)wb.onclick=()=>{r.wall++;if(r.wall>=3)unlock("wall");Snd.click(1);render();};
+  const vb=$("#vid");if(vb)vb.onclick=shootVideo;
   if(!r.valeraDone){
     $("#argue").onclick=()=>argueGame(q=>{if(q>=.6){const g=Math.round(r.valera*1.1);S.money+=g;r.pay+=g;r.notes.push(`Валера сдался и отдал ${g}₽ — вместе с моральной компенсацией.`);unlock("valera");Snd.coin();}
       else{r.notes.push(`Валера переспорил: «${rnd(V_LINES)}». ${r.valera}₽ уплыли.`);S.rep=clamp(S.rep-2,0,100);Snd.fail();}r.valeraDone=true;render();});
@@ -994,12 +1106,494 @@ function renderResult(){
   }
   document.querySelectorAll("[data-a]").forEach(b=>b.onclick=()=>{const o=QUESTIONS[r.question][b.dataset.a];
     if(o.m){S.money+=o.m;r.pay+=o.m;}if(o.r)S.rep=clamp(S.rep+o.r,0,100);if(o.h)S.happy=clamp(S.happy+o.h,0,100);
-    r.notes.push(o.t);r.qDone=true;(o.m||0)+(o.r||0)+(o.h||0)>0?Snd.coin():Snd.fail();render();});
+    r.notes.push(o.t);r.qDone=true;if(b.dataset.a==="nod"){S.stats.nods=(S.stats.nods||0)+1;if(S.stats.nods>=30){unlock("nod");if(Math.random()<.4)r.notes.push("Заказчик: «Ты всегда киваешь. Я тебя уважаю».");}}(o.m||0)+(o.r||0)+(o.h||0)>0?Snd.coin():Snd.fail();render();});
   $("#go").onclick=()=>{
     if(r.back==="evening"){S.phase="evening";S.log.unshift(r.pay?`${r.label}: +${r.pay}₽ (${Math.round(r.q*100)}%).`:`${r.label} — готово.`);Snd.step();return render();}
+    if(r.back==="commission")return startCommission(S.comPending||"obj");
     if(r.back==="sleep")return sleep();
-    S.phase="evening";S.log=[];S.eve={gig:false,nigora:Math.random()<.3,night:S.day>=3&&!S.project&&Math.random()<.2};const ev=Math.random()<.5?rnd(EVENTS):null;if(ev){S.happy=clamp(S.happy+ev.h,0,100);S.log.push(ev.t);}
+    if(r.back==="show"){const t=S.show.types[S.show.i];return startJob({type:t,client:"tv",show:true,text:"",base:0,color:rnd(PAINTS)});}
+    S.phase="evening";S.log=[];S.eve={gig:false,nigora:Math.random()<.3,night:S.day>=3&&!S.project&&Math.random()<.2};eveningEvents();
     if(S.helper&&Math.random()<.5){const l=rnd(HELPER_LINES);S.log.push(l);if(l.includes("30₽"))S.money+=30;}Snd.step();render();};
+}
+
+/* ================= ОБНОВЛЕНИЕ 1.5: сезоны, Сергей, шоу, матрёшка, общага, фирма ================= */
+const SEASONS=[["Весна","🌸"],["Лето","☀️"],["Осень","🍂"],["Зима","❄️"]];
+function season(){return Math.floor((S.day-1)/7)%4;}
+const SEASON_JOBS={0:["paint","wallpaper","tile"],1:["paint","brick","wallpaper"],2:["putty","laminate","drywall"],3:["plumbing","electric","grout"]};
+const SEASON_NOTES=["🌸 Пришла весна: все хотят освежить ремонт.","☀️ Лето: дачники заказывают покраску и заборы.","🍂 Осень: время выравнивать и утеплять стены.","❄️ Зима: трубы лопаются — сантехника и электрика дороже на 20%."];
+function workTypes(){return Object.keys(JOBS).filter(k=>!JOBS[k].gig&&!JOBS[k].special&&unlocked(k));}
+const TV_LINES=["Камера любит тебя!","Быстрее, через минуту реклама!","Зрители в восторге!","Это войдёт в историю телевидения!","Улыбнись, нас смотрит вся страна!"];
+const DREAMS=["Снилось, что плитка летит в космос, а Билибиджон кладёт её прямо на Луну. Ровно.","Снилось, что Эдик работает плиточником у Билибиджона и просит аванс.","Снилось, что голубь вернул все лепёшки. С процентами.","Снилось, что мама приехала и сказала: «Сынок, как ровно!»","Снилось, что Валера заплатил. Сразу. Целиком. Билибиджон проснулся в холодном поту."];
+const PARCEL=[["банка айвового варенья","h",8],["курага (бабушка сказала: «для силы»)","strong"],["тёплые носки, вязала бабушка","h",6],["камень с родины («просто так»)","h",5],["100₽ в носке","m",100],["разговорник от сестры","w"],["фото семьи в рамке","h",10],["пакет специй для плова","h",4]];
+const KITTEN_LINES=["🐱 Котёнок Шпатель спал на шпателе. Шпатель теперь пушистый.","🐱 Шпатель разбудил в 5 утра. Билибиджон не против.","🐱 Шпатель уронил разговорник. Открылся на слове «спасибо».","🐱 Шпатель поймал муху. Голубь за окном нервничает."];
+const WALL_LINES=["🧱 Стена: «Билибиджон… ты меня слышишь?»","🧱 Стена: «Ты хорошо меня зашпаклевал. Спасибо. Мне было холодно».","🧱 Стена: «Можно попросить… ещё один слой? И пакет чипсов?»"];
+const WALL_REPLY=["Кто здесь?!","Пожалуйста…","Чипсов?.."];
+const WALL_END="Оказалось, это сосед за стенкой — Гена. Ему просто хотелось поговорить. Теперь вы дружите через стену.";
+const CREW={shukhrat:{n:"Шухрата",nn:"Шухрат",d:"Быстрый, но кривой: +20% времени на работах, −5% качества",hire:100,wage:60,rep:30},dilshod:{n:"Дилшода",nn:"Дилшод",d:"Медленный, но идеальный: исправляет 35% ошибок, −10% времени",hire:200,wage:90,rep:45}};
+function crewWage(){return Object.keys(CREW).reduce((a,k)=>a+(S.crew[k]?CREW[k].wage:0),0);}
+function crewCount(){return (S.helper?1:0)+Object.keys(CREW).filter(k=>S.crew[k]).length;}
+function ashot(){return S.rep>=80?["Гипермаркет «Ашот»",.8,"Акция: 2 шпателя по цене 3! Ашот говорит, что это выгодно."]:S.rep>=50?["Строймаркет «Ашот»",.9,"Ашот открыл магазин. Скидка 10% постоянным клиентам. Честно."]:["Строительный рынок",1,"Дядя Ашот продаёт инструменты. Говорит, что со скидкой. Скидки никто не видел."];}
+const toolPrice=t=>Math.round(t.price*ashot()[1]);
+
+const PROJECT_CARD=()=>`<div class="panel"><div class="who">Олигарх Эдик · особый заказ<span class="tag">3 дня</span></div>
+        <p class="log">Ремонт мечты: золотой унитаз, плитка с портретом Эдика и бассейн в ванной (но чтобы ванна осталась). Три работы, по одной в день. 1800₽ в конце, но если хоть одна провалится — Эдик недоволен всем.</p>
+        <div class="quote">${say("Сделай мне всё {хорошо}! {деньги} много!")}</div><button data-p="1">Взять ремонт под ключ<small>Следующие 3 дня — только Эдик</small></button></div>`;
+function specialCard(o,i){
+  if(o.special==="project")return PROJECT_CARD();
+  if(o.special==="duel")return `<div class="panel"><div class="who">Сергей «Евроремонт» · дуэль<span class="tag">вызов</span></div>
+    <p class="log">«Работаю с 1998. Ровнее меня только лазер». Один объект, одна работа — кто лучше. Победишь: деньги, репутация и его клиент завтра. Проиграешь: позор в его соцсетях.</p>
+    <button data-sp="duel">😤 Принять вызов<small>Случайная работа из твоих профессий · побед ${S.sergey.w}, поражений ${S.sergey.l}</small></button></div>`;
+  if(o.special==="show")return `<div class="panel"><div class="who">Телешоу «Ремонт за 24 часа»<span class="tag">прямой эфир</span></div>
+    <p class="log">Три работы подряд под камерой, времени меньше. Гонорар до 700₽ и тысячи подписчиков.</p><button data-sp="show">🎬 Сняться в шоу<small>Весь день, 3 этапа</small></button></div>`;
+  if(o.special==="obj")return objCard(o,i);
+  if(o.special==="matr")return `<div class="panel"><div class="who">Хозяин старого дома · странный заказ</div>
+    <p class="log">«Отдерите старую плитку. Там… несколько слоёв». Дом 1972 года.</p><button data-sp="matr">🪆 Отдирать плитку<small>Сколько там слоёв — никто не знает</small></button></div>`;
+  return "";
+}
+function startSpecial(k){
+  if(k==="duel"){const t=rnd(workTypes());startJob({type:t,client:"sergey",duel:true,text:"",base:250,color:rnd(PAINTS)});}
+  if(k==="show"){const types=shuffle(workTypes()).slice(0,3);S.show={types,i:0,scores:[]};S.offers=null;startJob({type:types[0],client:"tv",show:true,text:"",base:0,color:rnd(PAINTS)});}
+  if(k==="matr")startJob({type:"matryoshka",client:"oldhouse",text:"",base:320});
+}
+function dayOffCard(){if((S.finale&&!S.won)||S.project||S.show||S.obj)return "";
+  return `<div class="panel"><div class="who">Выходной · без заработка</div><p class="log">Иногда надо просто отдохнуть.</p><button id="dayoff">🌳 Взять выходной<small>Парк, рыбалка, торговый центр или сон до обеда</small></button></div>`;}
+function dayOff(){showDialog("🌳 Выходной","<p>Как проведём день?</p>",[
+  ["🌳 Парк",()=>doOff("Гулял в парке и кормил уток. Утки не воровали. Не то что голубь.",15)],
+  ["🎣 Рыбалка",()=>{const fish=Math.random()<.4;if(fish&&!S.ate)S.ate="fish";doOff(fish?"Поймал рыбу! Ужин есть. Рыба размером с ладонь, но в рассказах — с руку.":"Рыба не клевала, зато было тихо. Очень тихо.",10);}],
+  ["🛍️ Торговый центр",()=>doOff("Два часа смотрел на телевизоры. Купил носки. День удался.",8)],
+  ["😴 Сон до обеда",()=>{S.tired=false;doOff("Спал до обеда. Впервые за месяц. Сон был про плитку.",12);}],
+  ["Отмена",closeDialog]]);}
+function doOff(t,hp){closeDialog();S.happy=clamp(S.happy+hp,0,100);S.offers=null;S.phase="evening";S.log=[`🌳 Выходной. ${t} Счастье +${hp}.`];
+  S.eve={gig:false,nigora:Math.random()<.3,night:false};unlock("dayoff");Snd.chime();render();}
+
+/* ---------- плитка-матрёшка ---------- */
+function matrGame(){
+  const cv=$("#cv"),{c,w,h}=setupCanvas(cv,1.05),L=7;
+  const LAB=["Слой 1: плитка 2010-х","Слой 2: «под мрамор»","Слой 3: 1990-е, с ромашками","Слой 4: советский кафель","Слой 5: ещё советский кафель","Слой 6: что-то синее","Слой 7: …там что-то есть"];
+  const COL=["#9ED8C8","#EFE6C8","#F2F2EC","#9FD3F2","#B9E3C6","#1F4FA8","#8A6E4B"];
+  let layer=0,cells=[],t=0;const hpOf=()=>1+Math.floor(layer/3),newLayer=()=>{cells=Array(9).fill(hpOf());};newLayer();
+  const cs=Math.min((w-40)/3,(h-70)/3),ox=(w-cs*3)/2,oy=50;
+  cv.onpointerdown=e=>{e.preventDefault();if(layer>=L)return;const b=cv.getBoundingClientRect(),x=Math.floor((e.clientX-b.left-ox)/cs),y=Math.floor((e.clientY-b.top-oy)/cs);
+    if(x<0||y<0||x>2||y>2)return;const i=y*3+x;if(cells[i]<=0)return;cells[i]--;Snd.tone(500+layer*60,.06,"square",.05);vib(15);
+    if(cells.every(v=>v<=0)){layer++;Snd.chime();if(layer<L)newLayer();}};
+  timer(24*tm(),tt=>{t=tt;$("#sc").textContent="слой "+Math.min(layer+1,L)+" / "+L;
+    c.fillStyle=css("--surface");c.fillRect(0,0,w,h);c.fillStyle=css("--ink");c.font="500 15px BiliBody,Rubik,sans-serif";
+    c.fillText(layer<L?LAB[layer]:"📜 Под последним слоем что-то есть…",14,30);
+    const under=layer+1<L?COL[layer+1]:"#C9B48A";
+    for(let i=0;i<9;i++){const x=ox+(i%3)*cs,y=oy+Math.floor(i/3)*cs;c.fillStyle=under;c.fillRect(x+3,y+3,cs-6,cs-6);
+      if(layer<L&&cells[i]>0){c.fillStyle=COL[layer];c.fillRect(x+3,y+3,cs-6,cs-6);c.strokeStyle=css("--ink");c.lineWidth=2;c.strokeRect(x+3,y+3,cs-6,cs-6);
+        if(cells[i]<hpOf()){c.strokeStyle="#14213D";c.beginPath();c.moveTo(x+10,y+10);c.lineTo(x+cs/2,y+cs/2);c.lineTo(x+cs-14,y+cs*.3);c.stroke();}}}
+    if(layer>=L){c.font="60px sans-serif";c.fillText("📜",w/2-30,oy+cs*1.5+20);}
+    evTick(c,w,h,t,cv);return layer>=L;
+  },()=>{if(layer>=L)unlock("matryoshka");
+    endJob(layer/L,layer>=L?`📜 Под седьмым слоем — записка: «Кто это читает — привет из 1972-го. Клал криво, простите. Плиточник Толик». Билибиджон оставил рядом свою: «Положу ровно. Билибиджон».`:`Отбито слоёв: ${layer} из ${L}. Что под остальными — тайна.`);});
+}
+/* ---------- нарды ---------- */
+function nardyGame(){
+  const M=S.mini;if(M.r==null){M.r=0;M.me=0;M.ru=0;M.lg=[];}
+  const F=["⚀","⚁","⚂","⚃","⚄","⚅"],d=()=>1+Math.floor(Math.random()*6),over=M.me>=2||M.ru>=2;
+  $("#screen").innerHTML=`<div class="panel"><h2>🎲 Нарды с Рустамом</h2><p class="log">По-простому: у кого больше на двух кубиках. До двух побед.${M.bet?"":" Играете при свечах."}</p>
+    <p class="big" style="text-align:center">${M.me} : ${M.ru}</p><p class="who" style="text-align:center">Билибиджон · Рустам</p>
+    ${M.last?`<p style="font-size:2.6rem;text-align:center;margin:.2em 0">${M.last}</p>`:""}${M.lg.slice(0,3).map(l=>`<p class="log">${l}</p>`).join("")}
+    ${over?`<button class="main" id="nEnd">${M.me>=2?"Забрать выигрыш":"Вернуться"}</button>`:`<button class="main" id="nRoll">🎲 Бросить кости</button>`}</div>`;
+  if(!over)$("#nRoll").onclick=()=>{const a=d(),b=d();let x=d(),y=d(),cheat="";
+    if(x+y<a+b&&Math.random()<.3){x=d();y=d();cheat=" Рустам «случайно» уронил кости и перебросил.";}
+    const me=a+b,ru=x+y;M.last=`${F[a-1]}${F[b-1]} · ${F[x-1]}${F[y-1]}`;
+    if(me>ru){M.me++;M.lg.unshift(`Ты: ${me}, Рустам: ${ru}. Очко тебе!${cheat}`);Snd.click(1);}
+    else if(ru>me){M.ru++;M.lg.unshift(`Ты: ${me}, Рустам: ${ru}. Рустам запел победную песню.${cheat}`);Snd.fail();}
+    else M.lg.unshift(`Ничья: ${me}. Перебрасываем.`);
+    nardyGame();};
+  else $("#nEnd").onclick=()=>{S.phase="evening";const won=M.me>=2,prize=M.bet?M.bet*2:20;
+    if(won){S.money+=prize;S.stats.nardy=(S.stats.nardy||0)+1;if(S.stats.nardy>=3)unlock("nardy");S.log.unshift(`🎲 Обыграл Рустама в нарды: +${prize}₽. Рустам требует реванш завтра.`);Snd.coin();}
+    else S.log.unshift("🎲 Рустам выиграл и в честь победы спел ещё раз. Ту же песню.");
+    S.mini=null;render();};
+}
+function finishWedding(q){
+  S.phase="evening";S.mini=null;const hp=Math.round(15+25*q);S.happy=clamp(S.happy+hp,0,100);unlock("wedding");
+  S.log.unshift(q>.7?`💍 Тост удался! Брат обнял телефон, невеста плакала, бабушка сказала «как по телевизору». Счастье +${hp}.`:`💍 Связь зависла на словах «дорогие молодые…». Тётя Гуля сказала, что пауза была очень трогательной. Счастье +${hp}.`);
+  pushMsg({f:"brother",t:q>.7?"Брат, спасибо за тост! Все плакали 😭❤️":"Брат, ты завис, но мы всё поняли ❤️"});pushMsg({f:"grandma",t:"💍🎉🐄👍"});Snd.fanfare();render();
+}
+function wallHtml(r){return r.wall<3?`<div class="quote">${WALL_LINES[r.wall]}</div><button id="wallBtn">${WALL_REPLY[r.wall]}</button>`:`<p class="log">🧱 ${WALL_END}</p>`;}
+function partyHtml(){if(S.day%7!==0||S.eve.party)return "";
+  return `<div class="panel" data-tab="home"><h2>🎉 Праздник в общежитии!</h2><p class="log">Все несут что-нибудь на общий стол. Дружба с соседями: ${S.dorm||0}${(S.dorm||0)>=3?" — соседи стали тише":""}.</p>
+    ${[["🫓 Лепёшки",30,5,1],["🍚 Плов",60,10,2],["🎂 Торт",100,15,3]].map(([n,p,hp,f])=>`<button data-party="${p},${hp},${f}" ${S.money<p?"disabled":""}>${n}<small>${p}₽ · счастье +${hp} · дружба +${f}</small></button>`).join("")}
+    <button data-party="0,0,0">Не идти<small>Лучше посплю</small></button></div>`;}
+function crewHtml(){return `<div class="panel" data-tab="work"><h2>Земляки ищут работу</h2>${Object.entries(CREW).map(([k,c])=>S.crew[k]
+  ?`<button data-cf="${k}">🙋 ${c.nn} в бригаде<small>${c.d} · ${c.wage}₽/день · нажми, чтобы отпустить</small></button>`
+  :`<button data-ch="${k}" ${S.money<c.hire||S.rep<c.rep?"disabled":""}>👷 Нанять ${c.n}<small>${c.d} · ${c.hire}₽ сразу + ${c.wage}₽/день${S.rep<c.rep?" · нужна репутация "+c.rep:""}</small></button>`).join("")}</div>`;}
+function tenderChance(){return clamp(.25+S.rep/200+S.company.lvl*.05,0,.85);}
+function companyHtml(){
+  if(!S.endless)return "";
+  if(!S.company)return `<div class="panel" data-tab="work"><h2>🏢 Своя фирма</h2><p>Дом для мамы построен. Пора открыть «Билибиджон и партнёры»?</p><button id="coOpen" ${S.money<2000?"disabled":""}>🏢 Открыть фирму<small>2000₽ · доход каждый день</small></button></div>`;
+  const L=S.company.lvl;
+  return `<div class="panel" data-tab="work"><h2>🏢 «Билибиджон и партнёры» · ур. ${L}</h2><p class="log">Доход: ${100*L+50*crewCount()}₽ в день · тендеров выиграно: ${S.company.wins||0}</p>
+    ${!S.eve.tender?`<button id="coTender">📑 Тендер против Сергея «Евроремонт»<small>Шанс победы ${Math.round(tenderChance()*100)}% · приз 500₽</small></button>`:""}
+    <button id="coUp" ${S.money<L*1500?"disabled":""}>📈 Расширить фирму<small>${L*1500}₽ · +100₽ дохода в день</small></button></div>`;
+}
+function eveningExtras(){
+  const on=(id,fn)=>{const el=$("#"+id);if(el)el.onclick=fn;};
+  on("nardy",()=>{S.eve.nardy=true;const bet=S.eve.blackout?0:20;S.money-=bet;S.phase="mini";S.mini={kind:"nardy",bet};render();});
+  on("wed",()=>{S.eve.wedding=false;S.weddingDone=true;S.phase="mini";S.mini={kind:"wedding"};Snd.ring();render();});
+  on("kit",()=>showDialog("🐈 Котёнок","<p>Маленький, полосатый, уже спит на твоём ботинке.</p>",[
+    ["Забрать! Назову Шпатель",()=>{S.kitten=true;S.kittenPending=false;S.happy=clamp(S.happy+10,0,100);unlock("kitten");S.log.unshift("🐱 Котёнок Шпатель теперь живёт в общаге. Комендант делает вид, что не видит.");closeDialog();render();}],
+    ["Не сейчас",()=>{S.kittenPending=false;closeDialog();render();}]]));
+  document.querySelectorAll("[data-party]").forEach(b=>b.onclick=()=>{const [p,hp,f]=b.dataset.party.split(",").map(Number);S.eve.party=true;
+    if(p){S.money-=p;S.happy=clamp(S.happy+hp,0,100);S.dorm=(S.dorm||0)+f;if(S.dorm>=5)unlock("party");
+      S.log.unshift("🎉 "+rnd(["Рустам спел. Храпун уснул прямо за столом. Это был лучший вечер месяца.","Все хвалили твоё угощение. Сосед вернул шпатель!","Танцевали до полуночи. Комендант пришёл ругаться и остался."])+` Дружба с соседями: ${S.dorm}.`);Snd.fanfare();}
+    else S.log.unshift("Билибиджон лёг спать. Сквозь стену было слышно, как Рустам поёт.");render();});
+  document.querySelectorAll("[data-ch]").forEach(b=>b.onclick=()=>{const k=b.dataset.ch,c=CREW[k];S.money-=c.hire;S.crew[k]=true;S.log.unshift(`👷 ${c.nn} в бригаде! ${k==="shukhrat"?"Уже всё сделал. Правда, непонятно что.":"Пять минут здоровался со всеми. Медленно, но идеально."}`);Snd.coin();render();});
+  document.querySelectorAll("[data-cf]").forEach(b=>b.onclick=()=>{const k=b.dataset.cf;S.crew[k]=false;S.log.unshift(`${CREW[k].nn} ушёл, но обещал звонить.`);render();});
+  on("coOpen",()=>{S.money-=2000;S.company={lvl:1,wins:0};unlock("company");S.log.unshift("🏢 Фирма «Билибиджон и партнёры» открыта! Мама заказала визитки всем родственникам.");Snd.fanfare();render();});
+  on("coTender",()=>{S.eve.tender=true;if(Math.random()<tenderChance()){S.money+=500;S.company.wins++;S.rep=clamp(S.rep+2,0,100);S.log.unshift("📑 Тендер выигран! Сергей «Евроремонт» сказал, что это «просто повезло».");Snd.coin();}
+    else{S.log.unshift("📑 Тендер ушёл Сергею. Он прислал смайлик в очках 😎.");Snd.fail();}render();});
+  on("coUp",()=>{S.money-=S.company.lvl*1500;S.company.lvl++;S.log.unshift(`📈 Фирма выросла до уровня ${S.company.lvl}. Теперь у неё есть печать. Своя.`);Snd.coin();render();});
+}
+function nightStuff(happyBefore){
+  if(happyBefore>=80&&Math.random()<.4){S.strong=true;S.mnotes.push("💤 "+rnd(DREAMS)+" Проснулся бодрым: сегодня всё получится.");unlock("dream");}
+  if(S.day%7===1&&S.day>1){const items=shuffle(PARCEL).slice(0,2),names=[];
+    items.forEach(([n,k,v])=>{names.push(n);if(k==="h")S.happy=clamp(S.happy+v,0,100);if(k==="m")S.money+=v;if(k==="strong")S.strong=true;if(k==="w"){const u=WORDS.find(x=>!S.words.includes(x));if(u)S.words.push(u);}});
+    S.mnotes.push(`📦 Посылка из дома! Внутри: ${names.join(" и ")}.`);unlock("parcel");pushMsg({f:"mama",t:"Посылку получил? Там ещё кое-что на дне 😉"});}
+  if((S.day-1)%7===0)S.mnotes.push(SEASON_NOTES[season()]);
+  if(S.kitten&&Math.random()<.3)S.mnotes.push(rnd(KITTEN_LINES));
+  if(S.company){const inc=100*S.company.lvl+50*crewCount();S.money+=inc;S.mnotes.push(`🏢 «Билибиджон и партнёры» заработали ${inc}₽.`);}
+}
+
+/* ================= ОБЪЕКТЫ И ПРИЁМОЧНАЯ КОМИССИЯ ================= */
+const OBJECTS={
+  medium:[{n:"Квартира-студия",e:"🏠",st:["tile","putty","paint"],pay:1100},{n:"Ларёк «Шаурма у Ашота-младшего»",e:"🌯",st:["tile","electric"],pay:800},
+    {n:"Кафе «Плов & Кофе»",e:"☕",st:["mosaic","wallpaper","laminate"],pay:1300},{n:"Парикмахерская «Чёлка»",e:"💇",st:["tile","grout","paint"],pay:1150},
+    {n:"Офис IT-стартапа",e:"💻",st:["drywall","laminate","paint"],pay:1250},{n:"Цветочный ларёк «Розочка»",e:"💐",st:["paint","tile"],pay:780}],
+  big:[{n:"Торговый центр «Мега-Плаза»",e:"🏬",st:["tile","grout","laminate","electric","paint"],pay:3800},{n:"Банк «Надёжный»",e:"🏦",st:["putty","tile","mosaic","electric","paint"],pay:4200},
+    {n:"Школа №5",e:"🏫",st:["putty","paint","laminate","plumbing","tile"],pay:3300},{n:"Бизнес-центр «Сити»",e:"🏢",st:["drywall","electric","tile","grout","wallpaper"],pay:4000},
+    {n:"Вокзал",e:"🚉",st:["tile","brick","cut","plumbing","paint"],pay:3600}],
+};
+const daysWord=n=>n===1?"день":n<5?"дня":"дней";
+function objCard(o,i){const O=o.o,n=O.st.length,big=o.size==="big";
+  return `<div class="panel"><div class="who">${big?"Большой объект":"Средний объект"}<span class="tag">${n} ${daysWord(n)}</span></div><h2>${O.e} ${O.n}</h2>
+    <p class="log">Работы: ${O.st.map(t=>JOBS[t].name.toLowerCase()).join(", ")}. Перед сдачей — приёмочная комиссия из ${big?5:3} очень умных людей.</p>
+    <p>Оплата: до <b>${O.pay}₽</b>, после подписи акта</p>
+    <button data-obj="${i}">${big?"🏗️ Взяться за большой объект":"🔨 Взяться за объект"}<small>Следующие ${n} ${daysWord(n)} — только этот объект</small></button></div>`;}
+function startObject(of){
+  const st=of.o.st.map(t=>unlocked(t)?t:rnd(workTypes()));
+  S.obj={name:of.o.n,e:of.o.e,size:of.size,pay:of.o.pay,st,i:0,scores:[]};S.offers=null;makeOffers();startJob(S.offers[0]);
+}
+const COM_TYPES={
+  bureau:{ok:["📄 Вот справка о справке","🖋️ Тут есть печать. Даже две"],q:["Где справка, что эта плитка — плитка?","Я не вижу печати на стене. Как я пойму, что стена настоящая?","Почему акт на одной странице? Солидные акты — от сорока страниц."]},
+  youtube:{ok:["🧪 Шов с графеном, премиум-класс","📡 Тут нанотехнологии, их просто не видно"],q:["Я смотрел видео: шов должен быть с нанотехнологией. Где нанотехнология?","Блогер сказал, что плитку кладут по фэншую. Это по фэншую?","В одном ролике стены дышат. А эта стена дышит?"]},
+  boss:{ok:["👔 Это ваша идея, я только воплотил","🙏 Как вы и советовали в прошлый раз"],q:["Я бы сделал по-другому.","Кто разрешил делать хорошо без моего разрешения?","Почему никто не спросил моё мнение? У меня есть мнение."]},
+  esthete:{ok:["🎨 Это минимализм. Стена молчит о главном","🖼️ Это концепция «тишина и швы»"],q:["Почему стена белая? Что она хочет нам сказать?","Мне здесь не хватает драмы. Где драма?","Этот пол не вызывает у меня эмоций. Почему?"]},
+  gost:{ok:["📏 По ГОСТу. И даже чуть-чуть больше","⚖️ Сертифицировано трижды, на всякий случай"],q:["А угол в 90 градусов — это по ГОСТу?","А если сюда упадёт метеорит, плитка выдержит?","А вы проверяли, что потолок — сверху?"]},
+  random:{ok:null,q:["Я не знаю, зачем я здесь. Но мне не нравится.","А обед будет?","Я тоже когда-то клал плитку. Один раз. В детстве."]},
+};
+const COM_NAMES={bureau:[["🧓","Пётр Семёнович","главный инспектор по углам"],["👵","Галина Борисовна","хранитель печатей"]],
+  youtube:[["🧑‍💻","Влад","эксперт по ремонту (из YouTube)"],["🤳","Даниил","блогер-консультант"]],
+  boss:[["🤵","Аркадий Петрович","заместитель начальника по красоте"],["👨‍💼","Игорь Олегович","начальник отдела приёмки приёмки"]],
+  esthete:[["🧣","Ростислав","консультант по энергетике пространства"],["💅","Инна","арт-директор, но в стройке"]],
+  gost:[["🦺","Семён Ильич","специалист по безопасности безопасности"],["📋","Олег","контролёр контролёров"]],
+  random:[["🙂","Гена","член комиссии, который просто пришёл"],["🥱","Стажёр Глеб","стажёр, но с мнением"]]};
+const HONEST=["Это же видно","Сделано по проекту","Это просто плитка","Так не бывает","Это обычная затирка"];
+const COM_OK=["кивает с умным видом: «Я так и думал».","записывает в блокнот: «Компетентен».","поправляет очки: «Наконец-то профессионал».","шепчет соседу: «Он шарит»."];
+const COM_BAD=["возмущён: «Вы спорите с экспертом?!»","смеётся: «Какой наивный».","записывает замечание. Почерк злой.","звонит кому-то: «Тут один умный нашёлся»."];
+function startCommission(kind){
+  const big=kind==="obj"&&S.obj&&S.obj.size==="big",n=big?5:3,types=shuffle(Object.keys(COM_TYPES)).slice(0,n);
+  const m=types.map(t=>{const [e,nm,title]=rnd(COM_NAMES[t]),T=COM_TYPES[t];
+    const opts=t==="random"?[["🙂 Кивнуть",1],[rnd(HONEST),0],[rnd(COM_TYPES.youtube.ok),.5]]:[[rnd(T.ok),1],[rnd(HONEST),0],["🙂 Кивнуть",.5]];
+    return {t,e,n:nm,title,q:rnd(T.q),opts:shuffle(opts)};});
+  S.com={kind,m,i:0,score:0,last:null,obj:kind==="obj"?`${S.obj.e} ${S.obj.name}`:"🏗️ Ремонт мечты Эдика"};
+  S.phase="commission";Snd.tone(180,.4,"sawtooth",.04,120);render();
+}
+function renderCommission(){
+  const C=S.com;if(!C){S.phase="evening";return render();}
+  if(C.i>=C.m.length)return finishCommission();
+  const m=C.m[C.i];
+  $("#screen").innerHTML=`<div class="panel"><h2>🧐 Приёмочная комиссия · ${C.i+1} из ${C.m.length}</h2><p class="log">${C.obj}. Члены комиссии очень умные. Им так кажется. Отвечай так, как им понравится.</p>
+    <div class="hero"><div style="font-size:4.2rem;line-height:1">${m.e}</div><div class="bubble"><b>${m.n}</b>, ${m.title}:<br>«${m.q}»</div></div>
+    ${C.last?`<p class="log">${C.last}</p>`:""}${m.opts.map((o,k)=>`<button data-ca="${k}">${o[0]}</button>`).join("")}</div>`;
+  document.querySelectorAll("[data-ca]").forEach(b=>b.onclick=()=>{const s=m.opts[+b.dataset.ca][1];C.score+=s;
+    C.last=`${m.e} ${m.n} ${s>=1?rnd(COM_OK):s>0?"смотрит с подозрением, но ставит галочку.":rnd(COM_BAD)}`;s>=1?Snd.click(1):s>0?Snd.step():(Snd.fail(),vib(60));C.i++;render();});
+}
+function finishCommission(){
+  const C=S.com,cs=C.score/C.m.length,pass=cs>=.5,notes=[];let pay=0,dr=0,q=0;
+  notes.push(`🧐 Комиссия: ${Math.round(cs*100)}% довольных умников. ${C.last||""}`);
+  if(C.kind==="obj"){const O=S.obj,avg=O.scores.reduce((a,b)=>a+b,0)/O.scores.length;q=.55*avg+.45*cs;
+    pay=Math.round(O.pay*q*(.8+S.rep/250));
+    if(pass){dr=O.size==="big"?8:5;notes.push(`✍️ Акт подписан! ${O.name}: объект сдан. Оплата ${pay}₽.`);unlock(O.size==="big"?"obj_b":"obj_m");}
+    else{pay=Math.round(pay*.7);dr=-4;notes.push("📝 Комиссия отправила на «доработку». Билибиджон переклеил одну плитку туда же, где она была. Комиссия: «Совсем другое дело!» Но заплатили на 30% меньше: "+pay+"₽.");}
+    S.obj=null;}
+  else{const sc=S.project.scores,avg=sc.reduce((a,b)=>a+b,0)/sc.length;q=.55*avg+.45*cs;
+    pay=Math.round(1800*avg*(.8+S.rep/250)*(.6+.4*cs));
+    if(pass&&Math.min(...sc)>=.5){dr=8;notes.push(`✍️ Комиссия Эдика подписала акт. Эдик расчувствовался и заплатил ${pay}₽.`);unlock("edikpro");}
+    else{pay=Math.round(pay*.5);dr=-6;notes.push(`📝 Эдик и его комиссия недовольны ВСЕМ. Даже тем, что было хорошо. Заплатили ${pay}₽.`);}
+    S.project=null;}
+  if(cs>=1)unlock("com100");
+  S.money+=pay;S.stats.earned+=pay;S.rep=clamp(S.rep+dr,0,100);S.com=null;S.comPending=null;
+  S.result={q,pay,notes,dr,valeraDone:true,qDone:true,question:null,label:pass?"Акт подписан":"На доработку"};
+  S.phase="result";pass?Snd.fanfare():Snd.fail();render();
+}
+
+/* ================= НИГОРА ================= */
+const NIGORA_REQ={
+  shelf:{e:"🔧",ask:"прибить полку",title:"Полка для Нигоры",type:"drywall",help:"Полка чуть заваливается. Держи палец с той стороны, куда она клонится, пока вкручиваются саморезы.",ok:"Полка висит ровно. Нигора поставила на неё фото мамы и банку варенья.",bad:"Полка висит… как-то висит. Нигора всё равно рада."},
+  lamp:{e:"💡",ask:"повесить люстру",title:"Люстра для Нигоры",type:"drywall",help:"Люстра качается. Держи палец с той стороны, куда её клонит, пока крутятся шурупы.",ok:"Люстра висит, свет горит. Нигора выключила и включила её 12 раз от радости.",bad:"Люстра висит на честном слове. Нигора называет это «винтаж»."},
+  tap:{e:"🚰",ask:"починить кран — капает всю ночь",title:"Кран у Нигоры",type:"plumbing",help:"Собери трубы от крана к раковине. Времени больше — это же по-соседски.",ok:"Кран больше не капает. Нигора впервые за месяц выспалась.",bad:"Кран теперь не капает, а поёт. Нигора смирилась."},
+  socket:{e:"🔌",ask:"посмотреть розетку — искрит",title:"Розетка у Нигоры",type:"electric",help:"Всего один щиток: соедини провода по цветам.",ok:"Розетка больше не искрит. Чайник Нигоры снова кипит.",bad:"Розетка работает, но чайник теперь кипит за 4 секунды. Подозрительно."},
+  door:{e:"🚪",ask:"подпилить дверцу шкафа — не закрывается",title:"Шкаф Нигоры",type:"cut",help:"Одна дверца: подпили ровно по разметке.",ok:"Дверца закрывается мягко, как в мебельном салоне.",bad:"Дверца закрывается, но по ночам открывается сама."},
+};
+const NIGORA_GIFTS=[["Нигора дала с собой плов в контейнере. Ужин есть!","plov"],["Нигора угостила самсой. Голубь смотрел с завистью.",null],["Нигора научила говорить «спасибо» правильно. Теперь Билибиджон говорит его с её интонацией.",null],["Нигора подарила банку айвового варенья.",null],["Нигора налила чаю и рассказала, как сама приехала сюда пять лет назад.",null]];
+const NIGORA_MSGS=["Плов остался, заходи 🍚","Билибиджон, у меня опять кран 😅 шучу","Выучи слово «спасибо», пригодится 😉","Видела твой ролик! Кот на фоне — звезда 🐈","Не забудь продлить регистрацию, комендант ругается 😄","Сосед Рустам опять поёт. Беруши дать? 🎤"];
+function nigoraPerks(){const n=S.stats.nigora||0,p=[];if(n>=1)p.push("плов за 30₽");if(n>=4)p.push("учит 2 слова за вечер");if(n>=5)p.push("плов по маминому рецепту");if(n>=6)p.push("иногда приносит обед на объект");return p.length?p.join(" · "):"пока просто соседка";}
+function nigoraResult(J,q,notes){
+  const R=NIGORA_REQ[J.req]||NIGORA_REQ.shelf,hp=Math.round(10+12*q);S.happy=clamp(S.happy+hp,0,100);
+  const friend=q>.35;if(friend)S.stats.nigora=(S.stats.nigora||0)+1;
+  notes.push(`${q>.6?R.ok:R.bad} Счастье +${hp}.`);
+  const g=rnd(NIGORA_GIFTS);if(g[1]&&!S.ate)S.ate=g[1];notes.push("🎁 "+g[0]);
+  const n=S.stats.nigora||0;
+  if(friend){const lv={1:"Дружба с Нигорой: плов для тебя теперь за 30₽.",4:"Нигора теперь учит по 2 слова за вечер!",5:"Нигора дала мамин рецепт плова — он стал вкуснее: счастье +14.",6:"Нигора будет иногда приносить обед на объект."}[n];if(lv)notes.push("🍚 "+lv);}
+  else notes.push("Нигора: «Ничего, в следующий раз получится». Дружба не выросла.");
+  if(n>=3)unlock("nigora");
+  if(n>=8&&!S.nigoraMama){S.nigoraMama=true;unlock("nigora8");
+    pushMsg({f:"mama",t:"Сынок, мне звонила твоя соседка Нигора! Хорошая девушка. Плов, говорит, вкусный. Я ей свой рецепт дала 😊"});
+    notes.push("📱 Нигора созвонилась с мамой. Теперь они подруги. Билибиджон немного боится.");}
+}
+
+/* ================= МЕМЫ: голубь, соседи, телефон, отзывы, блог, маршрутка, торг, звонок, пасхалки, гардероб ================= */
+const PIGEON_LINES=["Голубь украл лепёшку. Прямо из рук.","Тот же голубь. Та же лепёшка. Билибиджон узнал его по наглому взгляду.","Голубь украл лепёшку и, кажется, подмигнул.","Голубь украл лепёшку и самсу. Он растёт.","У голубя появился сообщник. Тоже голубь.","Голубь украл лепёшку вместе с пакетом.","Голубь украл лепёшку и оставил расписку. «Верну потом». Почерк как у Валеры."];
+const NEIGHBOR_EVENTS=[
+  {t:"Сосед Рустам устроил караоке в 2 ночи. Репертуар: одна песня, 40 раз.",h:-5,tired:true},
+  {t:"Сосед «на минутку» взял шпатель. Минутка длится третий день.",h:-3},
+  {t:"Храпун из 4-й комнаты побил личный рекорд громкости. Стены дрожат.",h:-6},
+  {t:"Сосед угостил чаем и сказал, что Билибиджон «нормальный пацан».",h:6},
+  {t:"Сосед смотрел сериал на полной громкости. Билибиджон теперь знает, кто убийца.",h:-2},
+];
+const EDIK_DEMANDS=["Золотой унитаз. С подогревом.","Плитка с моим портретом. В профиль.","Бассейн в ванной, но чтобы ванна осталась.","Стена как у шейха, но дешевле.","Лампочки, которые хлопают, когда я захожу.","Пол, на котором видно моё отражение. Всегда."];
+const CAT_LINES=["🐈 По объекту гуляет кот заказчика.","🐈 Опять этот кот. Он явно следит за Билибиджоном.","🐈 Кот привёл друга. Теперь их двое.","🐈 Кот сел на ведро со шпаклёвкой и смотрит в душу.","🐈 Кот теперь здесь прораб. Валера нервничает.","🐈 Кот проверяет качество работы. Строго."];
+function evText(){return EV.type==="cat"?CAT_LINES[Math.min(CAT_LINES.length-1,(S.stats.cat||1)-1)]:EV_TEXT[EV.type];}
+function eveningEvents(){
+  const r=Math.random();
+  if(r<.2){S.pigeon=(S.pigeon||0)+1;S.happy=clamp(S.happy-4,0,100);const n=S.pigeon;
+    S.log.push("🕊️ "+(n<=PIGEON_LINES.length?PIGEON_LINES[n-1]:`Голубь-рецидивист: кража №${n}. Полиция голубей бездействует.`)+(n>=8&&!S.nestFound?" Хватит. Пора выследить его.":""));}
+  else if(r<.45){let e=rnd(NEIGHBOR_EVENTS);if(e.h<0&&(S.dorm||0)>=3&&Math.random()<.5)e=NEIGHBOR_EVENTS[3];S.happy=clamp(S.happy+e.h,0,100);if(e.tired)S.nightPending=true;S.log.push("🏢 "+e.t);}
+  else if(r<.7){const e=rnd(EVENTS);S.happy=clamp(S.happy+e.h,0,100);S.log.push(e.t);}
+}
+function renderMini(){const k=S.mini&&S.mini.kind;if(k==="pigeon")return pigeonGame();if(k==="call")return callGame();if(k==="commute")return commuteGame();if(k==="wedding")return callGame();if(k==="nardy")return nardyGame();S.phase="evening";render();}
+
+/* ---------- охота на голубя ---------- */
+function pigeonGame(){
+  $("#screen").innerHTML=`<div class="panel"><h2>🕵️ Охота на голубя</h2><p class="log">Голубь мечется по двору. Тапни по нему 5 раз, чтобы проследить до гнезда.</p><div class="hud"><span id="tm">--</span><span id="sc"></span></div><canvas id="cv"></canvas></div>`;
+  const cv=$("#cv"),{c,w,h}=setupCanvas(cv,1.1);let x=w/2,y=h/2,vx=120,vy=90,hits=0,flash=0,last=0;
+  cv.onpointerdown=e=>{e.preventDefault();const b=cv.getBoundingClientRect();if(Math.hypot(e.clientX-b.left-x,e.clientY-b.top-y)<40){hits++;flash=1;Snd.click(1);vib(30);vx=(Math.random()-.5)*500;vy=(Math.random()-.5)*500;}else Snd.tone(300,.05,"triangle",.03);};
+  timer(14,t=>{const dt=Math.min(.05,t-last);last=t;const sp=(1+hits*.25)/speedMul("pigeon");
+    if(Math.random()<.02){vx+=(Math.random()-.5)*300;vy+=(Math.random()-.5)*300;}
+    const m=Math.hypot(vx,vy)||1;vx=vx/m*200*sp;vy=vy/m*200*sp;x+=vx*dt;y+=vy*dt;
+    if(x<22||x>w-22)vx*=-1;if(y<22||y>h-22)vy*=-1;x=clamp(x,22,w-22);y=clamp(y,22,h-22);
+    c.fillStyle="#9C8F7A";c.fillRect(0,0,w,h);c.font="24px sans-serif";["🌳","🗑️","🚗"].forEach((e,i)=>c.fillText(e,24+i*(w/3),h-16));
+    c.font="38px sans-serif";c.textAlign="center";c.fillText("🕊️",x,y+12);c.textAlign="start";
+    if(flash>.05){c.strokeStyle=`rgba(255,201,60,${flash})`;c.lineWidth=4;c.beginPath();c.arc(x,y,30,0,7);c.stroke();}flash*=.9;
+    $("#sc").textContent=hits+" / 5";return hits>=5;
+  },()=>{S.phase="evening";S.mini=null;
+    if(hits>=5){S.nestFound=true;const loot=50+S.pigeon*10;S.money+=loot;S.happy=clamp(S.happy+15,0,100);unlock("pigeon");Snd.fanfare();
+      S.log.unshift(`🕊️ Гнездо найдено! Внутри: ${S.pigeon} лепёшек, самса, ключи от чьей-то машины и ${loot}₽. Голубь смотрит с уважением.`);}
+    else{S.log.unshift("🕊️ Голубь ушёл. Он вернётся. Они всегда возвращаются.");Snd.fail();}
+    render();});
+}
+/* ---------- видеозвонок ---------- */
+function startCall(cost){S.money-=cost;S.called=true;S.stats.calls++;S.phase="mini";S.mini={kind:"call"};Snd.ring();render();}
+function callGame(){const wed=S.mini.kind==="wedding";
+  $("#screen").innerHTML=`<div class="panel"><h2>${wed?"💍 Свадьба брата — прямой эфир":"📞 Видеозвонок маме"}</h2><p class="log">${wed?"Ты говоришь тост! Держи телефон в зоне связи, иначе зависнешь на словах «дорогие молодые».":"Связь ловится только в одном месте — и оно гуляет по комнате. Води телефоном и держи его в зелёной зоне."}</p><div class="hud"><span id="tm">--</span><span id="sc"></span></div><canvas id="cv"></canvas></div>`;
+  const cv=$("#cv"),{c,w,h}=setupCanvas(cv,1.15),R=58*sizeMul("call");let px=w/2,py=h*.7,hx=w/2,hy=h/2,ang=Math.random()*7,talk=0,last=0,frozen=false;
+  const setP=e=>{const b=cv.getBoundingClientRect();px=e.clientX-b.left;py=e.clientY-b.top;};
+  cv.onpointerdown=e=>{cv.setPointerCapture(e.pointerId);setP(e)};cv.onpointermove=e=>{if(e.buttons||e.pointerType==="touch")setP(e)};
+  timer(13,t=>{const dt=Math.min(.05,t-last);last=t;ang+=dt*(.55+Math.sin(t)*.35)/speedMul("call");hx=w/2+Math.cos(ang)*w*.3;hy=h*.45+Math.sin(ang*1.3)*h*.28;
+    const inZone=Math.hypot(px-hx,py-hy)<R;frozen=!inZone;if(inZone)talk=Math.min(100,talk+dt*11);
+    c.fillStyle=css("--surface");c.fillRect(0,0,w,h);
+    const g=c.createRadialGradient(hx,hy,5,hx,hy,R);g.addColorStop(0,"rgba(30,138,90,.5)");g.addColorStop(1,"rgba(30,138,90,0)");c.fillStyle=g;c.beginPath();c.arc(hx,hy,R,0,7);c.fill();
+    c.font="20px sans-serif";c.fillText("📶",hx-10,hy+7);
+    c.fillStyle="#14213D";c.fillRect(px-34,py-58,68,116);c.fillStyle=frozen?"#5A5F66":"#BFE3F5";c.fillRect(px-29,py-50,58,92);
+    c.font="34px sans-serif";c.textAlign="center";c.fillText(frozen?"😮":(Math.floor(t*4)%2?"😊":"😃"),px,py+4);
+    c.font="500 11px BiliBody,Rubik,sans-serif";c.fillStyle=frozen?"#fff":"#14213D";c.fillText(frozen?"зависла…":(wed?"Свадьба 💍":"Мама"),px,py+32);c.textAlign="start";
+    $("#sc").textContent=(wed?"тост ":"разговор ")+Math.round(talk)+"%";if(frozen&&Snd.throttle("frz",900))Snd.tone(200,.08,"square",.02);
+    return talk>=100;
+  },()=>wed?finishWedding(talk/100):finishCall(talk/100));
+}
+function finishCall(q){
+  S.phase="evening";S.mini=null;const hp=Math.round(10+25*q);S.happy=clamp(S.happy+hp,0,100);
+  const how=q>.8?"Поговорили, как будто рядом.":q<.4?"Мама зависла с открытым ртом на 5 минут. Поговорили жестами.":"Связь прыгала, но главное услышали.";
+  if(!S.quest&&S.day>=3&&Math.random()<.4){const qq=rnd(QUESTS);S.quest={text:qq.text,need:qq.need,deadline:S.day+qq.days};S.log.unshift(`📞 ${how} Мама: «Сынок, тут такое дело… ${qq.text.toLowerCase()}». Нужно ${qq.need}₽ до ${S.quest.deadline}-го дня. Счастье +${hp}.`);}
+  else S.log.unshift(`📞 ${how} ${rnd(CALLS)} Счастье +${hp}.`);
+  Snd.chime();render();
+}
+/* ---------- маршрутка ---------- */
+function commuteGame(){
+  $("#screen").innerHTML=`<div class="panel"><h2>🚐 Маршрутка</h2><p class="log">Маршрутка уже набита. Втисни всех по очереди: тапни клетку, куда встанет левый верхний угол. «↻» поворачивает.</p><div class="hud"><span id="tm">--</span><span id="sc"></span></div><canvas id="cv"></canvas><button id="rot">↻ Повернуть</button></div>`;
+  const cv=$("#cv"),{c,w,h}=setupCanvas(cv,.62),COLS=6,ROWS=3;
+  const pieces=[{e:"👷",n:"Билибиджон",w:1,h:2},{e:"🛍️",n:"Мешок шпаклёвки",w:2,h:1},{e:"🪣",n:"Ведро",w:1,h:1}];
+  if(S.helper)pieces.splice(1,0,{e:"🧔",n:"Фарход",w:1,h:2});
+  function fits(g,x,y,pw,ph){if(x<0||y<0||x+pw>COLS||y+ph>ROWS)return false;for(let a=0;a<pw;a++)for(let b=0;b<ph;b++)if(g[(y+b)*COLS+x+a])return false;return true;}
+  function mark(g,x,y,pw,ph,v){for(let a=0;a<pw;a++)for(let b=0;b<ph;b++)g[(y+b)*COLS+x+a]=v;}
+  let grid,ok=false;
+  for(let tr=0;tr<200&&!ok;tr++){grid=Array(COLS*ROWS).fill(0);ok=true;
+    for(const p of pieces){const rt=Math.random()<.5,pw=rt?p.h:p.w,ph=rt?p.w:p.h;let pl=false;
+      for(let k=0;k<40&&!pl;k++){const x=Math.floor(Math.random()*(COLS-pw+1)),y=Math.floor(Math.random()*(ROWS-ph+1));if(fits(grid,x,y,pw,ph)){mark(grid,x,y,pw,ph,9);pl=true;}}
+      if(!pl)ok=false;}}
+  const others=[];grid.forEach((v,i)=>{if(v===9)grid[i]=0;else others.push(i);});
+  shuffle(others).slice(1).forEach(i=>grid[i]=1);
+  let idx=0,rot=false;const placed=[],cw=(w-20)/COLS,ch=(h-50)/ROWS,ox=10,oy=40;
+  $("#rot").onclick=()=>{rot=!rot;Snd.step();};
+  cv.onpointerdown=e=>{e.preventDefault();if(idx>=pieces.length)return;const b=cv.getBoundingClientRect(),x=Math.floor((e.clientX-b.left-ox)/cw),y=Math.floor((e.clientY-b.top-oy)/ch);
+    const p=pieces[idx],pw=rot?p.h:p.w,ph=rot?p.w:p.h;
+    if(fits(grid,x,y,pw,ph)){mark(grid,x,y,pw,ph,2+idx);placed.push({p,x,y,pw,ph});idx++;rot=false;Snd.click(1);}else{Snd.fail();vib(40);}};
+  timer(16,t=>{$("#sc").textContent=idx+" / "+pieces.length;
+    c.fillStyle=css("--surface");c.fillRect(0,0,w,h);const p=pieces[idx];
+    c.fillStyle=css("--ink");c.font="500 14px BiliBody,Rubik,sans-serif";c.fillText(p?`Сейчас: ${p.e} ${p.n} (${rot?p.h:p.w}×${rot?p.w:p.h})`:"Все внутри!",12,24);
+    c.fillStyle="#F2D35B";c.fillRect(ox-6,oy-6,cw*COLS+12,ch*ROWS+12);
+    for(let i=0;i<COLS*ROWS;i++){const x=ox+(i%COLS)*cw,y=oy+Math.floor(i/COLS)*ch;c.fillStyle=grid[i]===1?"#C3CCD1":grid[i]>=2?"#BFE6DA":"#FFFFFF";c.fillRect(x+2,y+2,cw-4,ch-4);
+      if(grid[i]===1){c.font="22px sans-serif";c.fillText("🧍",x+cw/2-11,y+ch/2+8);}}
+    c.font="26px sans-serif";for(const q of placed)c.fillText(q.p.e,ox+(q.x+q.pw/2)*cw-13,oy+(q.y+q.ph/2)*ch+9);
+    return idx>=pieces.length;
+  },()=>{S.mini=null;if(idx>=pieces.length){unlock("commute");toast("🚐 Втиснулся! Приехал вовремя.");}else{S.late=true;toast("🚐 Маршрутка уехала. Опоздание: оплата −15%");}
+    S.phase="work";render();});
+}
+/* ---------- торг ---------- */
+function canHaggle(o){return !o.finale&&!o.project&&!o.special&&!o.haggled&&S.words.includes("деньги");}
+function haggle(i){
+  const o=S.offers[i],C=CLIENTS[o.client],base=o.base;let mult=1,pat=100,done=false;
+  const price=()=>Math.round(base*C.pay*(o.rec?1.2:1)*mult);
+  const mood=()=>mult<1.1?"«Хм… нормально»":mult<1.3?"«Дорого!»":mult<1.5?"«Ты что, Эдик?»":"«Я сейчас уйду к Валере!»";
+  showDialog(`🤝 Торг: ${C.name}`,`<p>Двигай цену вверх. Чем выше — тем быстрее кончается терпение.</p>
+    <p class="big" id="hp" style="text-align:center">${price()}₽</p><input id="hr" type="range" min="100" max="170" value="100" style="width:100%">
+    <p class="log" id="hm">${mood()}</p><div class="bar" style="height:10px"><i id="hb" style="width:100%;background:var(--good)"></i></div>`,[
+    ["🤝 Договорились",()=>finish(true)],["Отмена",()=>{done=true;clearInterval(iv);closeDialog();}]]);
+  const hr=$("#hr");hr.oninput=()=>{mult=hr.value/100;$("#hp").textContent=price()+"₽";$("#hm").textContent=mood();};
+  const iv=setInterval(()=>{if(!$("#hr")){clearInterval(iv);return;}pat-=Math.max(.3,(mult-.95)*7)*(C.rush?1.4:1);
+    const hb=$("#hb");hb.style.width=Math.max(0,pat)+"%";hb.style.background=pat<30?"var(--bad)":"var(--good)";if(pat<=0)finish(false);},100);
+  function finish(ok){if(done)return;done=true;clearInterval(iv);closeDialog();
+    if(ok){o.base=Math.round(base*mult);o.haggled=true;if(mult>=1.3)unlock("haggle");toast(mult>1.02?`Договорились: ${price()}₽!`:"Договорились по-честному");Snd.coin();}
+    else{S.offers.splice(i,1);toast(`${C.name} ушёл к прорабу Валере`);Snd.fail();vib(80);}
+    render();}
+}
+/* ---------- отзывы ---------- */
+const REVIEWS={5:["Плитку положил ровно, кивает приятно. 5 звёзд.","Не понял ни слова, но ремонт огонь 🔥","Мастер! Даже кот доволен.","Ровно, быстро, вежливо. Кивнул 14 раз."],4:["Хорошо, но долго кивал.","Почти идеально. Один шов смотрит на меня странно.","Рекомендую. Не понял, о чём договорились, но вышло хорошо."],3:["Нормально. Как у всех.","Сделал. Ушёл. Кивнул.","Средне. Зато улыбается."],2:["Криво, но с душой.","Обещал «хорошо», вышло «бряк-бряк».","Ремонт есть. Вопросы тоже."],1:["Теперь у меня авторский ремонт. Не просил.","Плитка держится на честном слове. Моём.","Вызвал другого мастера. Тот долго смеялся."]};
+const stars=s=>"★".repeat(s)+"☆".repeat(5-s);
+function addReview(J,C,q){
+  if(J.gig||J.nigora||J.finale||J.night)return null;
+  const s=clamp(Math.round(q*5+(Math.random()-.5)),1,5);let t=rnd(REVIEWS[s]);
+  if(C.crooked&&J.type==="tile")t=q>.7?"Наконец-то мастер, который понимает кривизну. Гений.":"Слишком ровно. Где душа? Где хаос?";
+  if(C.pies)t+=" Пирожки съел все — это плюс.";
+  const r={c:C.name,s,t,d:S.day};S.reviews.unshift(r);if(S.reviews.length>30)S.reviews.length=30;return r;
+}
+/* ---------- блог ---------- */
+function shootVideo(){
+  const r=S.result,J=S.job,B=S.blog;B.today=true;r.canVideo=false;
+  const asmr=["grout","putty","cut","paint"].includes(J.type)&&r.q>.8;
+  let v=Math.round((60+B.followers*.9)*(.4+r.q)*(.5+Math.random()*2)*(asmr?3:1));
+  const viral=v>=4000+B.followers*2;if(viral)v*=3;
+  const gain=Math.round(v*(viral?.06:.02));B.followers+=gain;B.best=Math.max(B.best,v);
+  if(viral){S.rep=clamp(S.rep+5,0,100);if(asmr)unlock("asmr");}
+  if(B.followers>=1000)unlock("blogger");
+  r.video={v,gain,asmr,viral,c:rnd(["«Залип на 10 минут»","«Это лучше любого сериала»","«Где купить такой шпатель?»","«Мой кот смотрит это каждый день»","«А почему он всё время кивает?»","«Билибиджон, приезжай ко мне, у меня ванная плачет»"])};
+  Snd.chime();render();
+}
+/* ---------- телефон и семейный чат ---------- */
+const FAMILY={nigora:"👩‍🍳 Нигора",mama:"👩 Мама",brother:"👦 Брат",grandma:"👵 Бабушка",sister:"👧 Сестра",dad:"👨 Папа",gulya:"👩‍🦱 Тётя Гуля"};
+const POSTCARDS=["🌹🐱☕ Доброе утро, сынок! Хорошего дня! 🌞","🌷🌷🌷 С добрым утром! Пусть день будет как этот тюльпан! 🌷","🐱🌸 Доброе утро! Не забудь покушать! 🍲","☀️🌻 Хорошего понедельника! (сегодня не понедельник, но всё равно)","🕊️🌹 Мир тебе и твоей плитке! 🧱","🌈🐶 Доброе утро! Это собачка. Просто так. ❤️"];
+const RANDOM_MSGS=[
+  {f:"brother",voice:true,len:"7:14",t:"…короче, слушай, и вот я ему говорю, а он такой, ну ты понял, и тут мама заходит…"},
+  {f:"brother",voice:true,len:"3:58",t:"…брат, ты там как? Слушай, вышел новый айфон. Просто информирую. Без намёков."},
+  {f:"grandma",t:"🐄🌹😂🙏⚡👍 (она имела в виду «береги себя»)"},
+  {f:"grandma",t:"СЫНОК КАК ВЫКЛЮЧИТЬ БОЛЬШИЕ БУКВЫ"},
+  {f:"sister",t:"Покажи, что ты сейчас делаешь! Мне для сторис 📸"},
+  {f:"dad",t:"Ровно кладёшь? 👍"},
+  {f:"gulya",t:"Бил, а мне такую плитку сделаешь, когда приедешь? Бесплатно же, мы же родня 😘"},
+  {f:"mama",t:"Видела по телевизору, что у вас там холодно. Надень шапку! 🧣"},
+];
+const ASKS=[
+  {q:"Сынок, ты поел?",opts:[["Да, мама","Молодец! Фото еды пришли."],["Почти","«Почти» — это не еда! 😠"],["Шашлык ел!","Шашлык каждый день нельзя! Ешь суп."]]},
+  {q:"Ты тёплую куртку носишь?",opts:[["Ношу","Умница 🥰"],["Тепло же","Простудишься! Надень!"],["Какую куртку?","😱😱😱"]]},
+  {q:"Когда приедешь?",opts:[["Скоро, мама","Жду! Уже думаю про плов ❤️"],["Как дом построю","Не торопись, береги себя 🙏"],["Кивок 🙂","Это что значит? Сынок?"]]},
+  {q:"Ты там не женился?",opts:[["Нет, мама!","Ну ладно… А есть кто на примете? 😏"],["Только на плитке","Шутник, весь в отца 😂"],["Фарход не считается?","Кто такой Фарход?!"]]},
+];
+const PHOTO_COMMENTS=[["mama","Сынок, ты похудел 😢"],["grandma","👍🌹🐄"],["brother","А это кто рядом, невеста? 😏"],["dad","Ровно. 👍"],["sister","Покажи ещё!"],["gulya","А мне такую сделаешь?"],["mama","Каска тебе идёт ❤️"]];
+function pushMsg(m){S.phone.msgs.push(Object.assign({d:S.day},m));if(S.phone.msgs.length>40)S.phone.msgs.splice(0,S.phone.msgs.length-40);if(!m.me)S.phone.unread++;}
+function dailyMessages(){
+  pushMsg({f:"mama",t:rnd(POSTCARDS),card:true});
+  if(Math.random()<.6)pushMsg(rnd(RANDOM_MSGS));
+  if((S.stats.nigora||0)>=2&&Math.random()<.3)pushMsg({f:"nigora",t:rnd(NIGORA_MSGS)});
+  if(S.phone.ask==null&&Math.random()<.35){const a=Math.floor(Math.random()*ASKS.length);S.phone.ask=a;pushMsg({f:"mama",t:ASKS[a].q});}
+}
+function chatHtml(){return `<div class="chat" id="chat">${S.phone.msgs.map((m,i)=>m.me?`<div class="msg me">${esc(m.t)}</div>`:
+  `<div class="msg${m.card?" card":""}"><b>${FAMILY[m.f]||m.f}</b>${m.voice?`<button class="voice" data-v="${i}">▶️ 🎤 Голосовое · ${m.len}</button>`:esc(m.t)}</div>`).join("")}</div>`;}
+function openPhone(){
+  S.phone.unread=0;save();renderStats();
+  const btns=[];
+  if(S.phone.ask!=null){ASKS[S.phone.ask].opts.forEach(([t,rsp])=>btns.push([`💬 ${t}`,()=>{pushMsg({me:true,t});pushMsg({f:"mama",t:rsp});S.phone.unread=0;S.phone.ask=null;
+    S.happy=clamp(S.happy+3,0,100);S.stats.replies=(S.stats.replies||0)+1;if(S.stats.replies>=10)unlock("son");Snd.click(1);openPhone();}]));}
+  if(!S.phone.photo&&S.stats.jobs>0)btns.push(["📸 Отправить фото с объекта",()=>{S.phone.photo=true;pushMsg({me:true,t:"📷 [фото: Билибиджон на фоне ровной плитки]"});
+    shuffle(PHOTO_COMMENTS).slice(0,3).forEach(([f,t])=>pushMsg({f,t:f==="brother"&&S.helper?"А это кто рядом, невеста? 😏 (это Фарход)":t}));S.phone.unread=0;S.happy=clamp(S.happy+4,0,100);Snd.chime();openPhone();}]);
+  btns.push(["🖼️ Стикеры",openStickers],["Закрыть",()=>{closeDialog();render();}]);
+  showDialog("📱 Семья ❤️",chatHtml(),btns);
+  const ch=$("#chat");if(ch)ch.scrollTop=ch.scrollHeight;
+  document.querySelectorAll("#dlg [data-v]").forEach(b=>b.onclick=()=>{const m=S.phone.msgs[+b.dataset.v];toast("🎤 "+m.t.slice(0,60)+"…");Snd.tone(220,.3,"sawtooth",.02,180);});
+}
+/* ---------- стикеры ---------- */
+const STICKERS=[["happy","Кивнул 🙂"],["sad","Скучаю по маме"],["nas","Ровно!"],["dizzy","Где деньги, Валера?"]];
+function openStickers(){
+  showDialog("🖼️ Стикеры Билибиджона",`<p class="log">Нажми на стикер — получишь картинку, которую можно отправить друзьям.</p><div class="ach">${STICKERS.map(([m,t],i)=>`<div data-st="${i}" style="cursor:pointer;text-align:center">${sprite(m)}<b>${t}</b></div>`).join("")}</div>`,
+    [["Назад",openPhone],["Закрыть",()=>{closeDialog();render();}]]);
+  document.querySelectorAll("#dlg [data-st]").forEach(el=>el.onclick=()=>makeSticker(+el.dataset.st));
+}
+async function makeSticker(i){
+  try{const [m,cap]=STICKERS[i];
+    const svg=sprite(m).replace("<svg ",'<svg xmlns="http://www.w3.org/2000/svg" width="232" height="272" ');
+    const img=new Image();img.src="data:image/svg+xml;charset=utf-8,"+encodeURIComponent(svg);await img.decode();
+    const cv=document.createElement("canvas");cv.width=cv.height=512;const c=cv.getContext("2d");
+    c.drawImage(img,106,10,300,352);
+    c.font="700 46px BiliDisplay,'Russo One',Rubik,sans-serif";c.textAlign="center";c.lineJoin="round";c.lineWidth=12;c.strokeStyle="#fff";c.fillStyle="#14213D";
+    c.strokeText(cap,256,440,490);c.fillText(cap,256,440,490);
+    const blob=await new Promise(r=>cv.toBlob(r,"image/png"));const file=new File([blob],`bilibidjon-sticker-${i+1}.png`,{type:"image/png"});
+    if(navigator.canShare&&navigator.canShare({files:[file]})&&/Android|iPhone|iPad/i.test(navigator.userAgent))await navigator.share({files:[file]});
+    else{const a=document.createElement("a");a.href=URL.createObjectURL(file);a.download=file.name;document.body.appendChild(a);a.click();setTimeout(()=>{URL.revokeObjectURL(a.href);a.remove();},1500);}
+    toast("🖼️ Стикер готов!");Snd.coin();
+  }catch(e){if(e&&e.name==="AbortError")return;toast("Стикер не сохранился 😢");}
+}
+/* ---------- секретные коды ---------- */
+function openSecret(){
+  showDialog("🔐 Секретный код",`<input id="sc_in" autocomplete="off" style="width:100%;font:18px BiliBody,Rubik,sans-serif;padding:8px;border:2px solid var(--ink);border-radius:4px;background:var(--surface);color:var(--ink);-webkit-user-select:text;user-select:text" placeholder="Введи код…">`,[
+    ["Проверить",()=>{const v=($("#sc_in").value||"").trim().toUpperCase().replace(/Ё/g,"Е"),once=k=>{if(S.codes.includes(k))return false;S.codes.push(k);return true;};
+      if(v==="БИЛИБИДЖОН"){unlock("secret");S.look.helmet="gold";closeDialog();toast("👑 Золотая каска открыта и надета!");Snd.fanfare();render();}
+      else if(v==="ВАЛЕРА"){closeDialog();if(once(v)){S.money+=1;toast("Валера: «Денег нет. Вот тебе 1₽, держись»");}else toast("Валера: «Я уже давал!»");render();}
+      else if(v==="МАМА"){closeDialog();if(once(v)){S.happy=clamp(S.happy+5,0,100);toast("❤️ Мама почувствовала, что ты о ней думаешь. Счастье +5");}else toast("❤️ Мама и так знает");render();}
+      else if(v==="НАСВАЙ"){closeDialog();toast("🌿 Продавец насвая передаёт привет");}
+      else{toast("Неверный код. Кот смотрит с осуждением 🐈");Snd.fail();}}],["Закрыть",closeDialog]]);
+  setTimeout(()=>{const i=$("#sc_in");if(i)i.focus();},50);
+}
+/* ---------- гардероб ---------- */
+const HELMETS={yellow:["Жёлтая каска",""],gold:["Золотая каска","secret|home"],siren:["Каска с мигалкой","night"],melon:["Каска-арбуз","pies"]};
+const VESTS={orange:["Оранжевый жилет",""],blue:["Синий жилет","legal"],black:["Чёрный жилет как у Эдика","edikpro"],flower:["Жилет в цветочек","allround"]};
+const lookOk=req=>!req||req.split("|").some(a=>S.ach.includes(a));
+function helmetSvg(){
+  const hm=(S&&S.look&&S.look.helmet)||"yellow";
+  if(hm==="melon")return `<path d="M29 46q0-26 29-26t29 26z" fill="#3FA34D" stroke="#14213D" stroke-width="2.5"/><path d="M40 44q3-16 9-21M58 44V21M76 44q-3-16-9-21" stroke="#1E6B2C" stroke-width="4" fill="none"/><rect x="24" y="43" width="68" height="7" rx="3" fill="#E84A5F" stroke="#14213D" stroke-width="2.5"/>`;
+  const col=hm==="gold"?"#F5C542":"#FFC93C",str=hm==="gold"?"#FFF3B0":"#F2B21C";
+  return `<path d="M29 46q0-26 29-26t29 26z" fill="${col}" stroke="#14213D" stroke-width="2.5"/><rect x="24" y="43" width="68" height="7" rx="3" fill="${col}" stroke="#14213D" stroke-width="2.5"/><rect x="54" y="22" width="8" height="21" rx="3" fill="${str}"/>`
+    +(hm==="gold"?'<path d="M36 36q3-8 9-11" stroke="#fff" stroke-width="3" fill="none" stroke-linecap="round"/>':"")
+    +(hm==="siren"?'<rect x="50" y="10" width="16" height="10" rx="3" fill="#C8352E" stroke="#14213D" stroke-width="2"><animate attributeName="fill" values="#C8352E;#1F4FA8;#C8352E" dur="0.8s" repeatCount="indefinite"/></rect>':"");
+}
+function vestSvg(){
+  const v=(S&&S.look&&S.look.vest)||"orange",col={orange:"#FF8A1F",blue:"#2F6FD6",black:"#1B1E24",flower:"#F6B48F"}[v]||"#FF8A1F",str=v==="black"?"#F5C542":"#F4F4F0";
+  return `<rect x="32" y="82" width="52" height="34" rx="10" fill="${col}" stroke="#14213D" stroke-width="2.5"/><path d="M38 96h40M38 104h40" stroke="${str}" stroke-width="4"/>`
+    +(v==="flower"?'<circle cx="40" cy="89" r="2.5" fill="#E84A5F"/><circle cx="72" cy="89" r="2.5" fill="#FFC93C"/><circle cx="56" cy="111" r="2.5" fill="#1E8A5A"/><circle cx="44" cy="111" r="2" fill="#7A5BD6"/>':"");
+}
+function wardrobeHtml(){
+  const row=(set,key,cur)=>Object.entries(set).map(([id,[n,req]])=>{const ok=lookOk(req),an=req?req.split("|").map(a=>ACH[a]?ACH[a][1]:a).join(" или "):"";
+    return `<button data-look="${key}:${id}" class="${cur===id?"on":""}" ${ok?"":"disabled"}>${ok?"":"🔒 "}${n}${ok?"":`<small>Ачивка «${an}»</small>`}</button>`;}).join("");
+  return `<div class="panel" data-tab="dorm"><details open><summary>👕 Гардероб</summary><div class="hero" style="justify-content:center;margin:8px 0">${sprite("happy")}</div>
+    <p class="who">Каски</p><div class="looks">${row(HELMETS,"helmet",S.look.helmet)}</div><p class="who">Жилеты</p><div class="looks">${row(VESTS,"vest",S.look.vest)}</div></details></div>`;
+}
+function reviewsHtml(){
+  const R=S.reviews,avg=R.length?(R.reduce((a,r)=>a+r.s,0)/R.length).toFixed(1):"—";
+  return `<div class="panel" data-tab="work"><details open><summary>⭐ Отзывы и блог · ${avg}</summary>
+    <p class="log">📹 Подписчиков: ${S.blog.followers.toLocaleString("ru-RU")} · лучший ролик: ${S.blog.best.toLocaleString("ru-RU")} просмотров${S.blog.followers>=1000?" · известный плиточник: +5% к оплате":""}</p>
+    ${R.length?R.slice(0,6).map(r=>`<p><b>${esc(r.c)}</b> <span style="color:var(--tape)">${stars(r.s)}</span><br><span class="log">«${esc(r.t)}» · день ${r.d}</span></p>`).join(""):'<p class="log">Пока нет отзывов.</p>'}</details></div>`;
 }
 
 /* ================= МИГРАЦИОННЫЙ ЦЕНТР ================= */
@@ -1111,26 +1705,47 @@ function sendHome(sum){
   render();
 }
 function foodPrice(f){return f.id==="plov"&&S.stats.nigora>0?30:f.price;}
+const TABS=[["home","🌙","Вечер"],["dorm","🍲","Общага"],["work","👷","Работа"],["shop","🛒","Рынок"],["goal","🏡","Цель"]];
+function applyTabs(){
+  const scr=$("#screen"),tab=TABS.some(t=>t[0]===S.tab)?S.tab:"home";
+  scr.querySelectorAll("[data-tab]").forEach(p=>p.hidden=p.dataset.tab!==tab);
+  const late=S.day>=(S.docGrace||5);
+  const badges={work:late&&(!patentOk()||!regOk())?"!":"",dorm:!S.ate?"!":"",shop:TOOLS.some(t=>!has(t.id)&&S.money>=toolPrice(t))?"•":""};
+  const bar=document.createElement("nav");bar.className="tabs";bar.setAttribute("role","tablist");
+  bar.innerHTML=TABS.map(([id,e,n])=>`<button role="tab" aria-selected="${id===tab}" data-tabbtn="${id}" class="${id===tab?"on":""}"><b>${e}</b><span>${n}</span>${badges[id]&&id!==tab?`<i>${badges[id]}</i>`:""}</button>`).join("");
+  scr.prepend(bar);
+  bar.querySelectorAll("[data-tabbtn]").forEach(b=>b.onclick=()=>{if(S.tab===b.dataset.tabbtn)return;S.tab=b.dataset.tabbtn;Snd.step();render();});
+  if(tab!=="home"){const f=document.createElement("div");f.className="panel";f.innerHTML='<button class="main sleepBtn">Спать</button>';scr.append(f);
+    f.querySelector(".sleepBtn").onclick=()=>$("#sleep").click();}
+}
 function renderEvening(){
+  if(S.eve.wedding===undefined){S.eve.wedding=!S.weddingDone&&S.day>=12&&Math.random()<.3;S.eve.blackout=Math.random()<.08;
+    if(S.eve.blackout){S.happy=clamp(S.happy+5,0,100);S.log.push("💡 В общежитии отключили свет. Все собрались в одной комнате со свечкой — и с нардами.");}}
+  if(S.eve.nigora&&!NIGORA_REQ[S.eve.nreq])S.eve.nreq=rnd(Object.keys(NIGORA_REQ));
   const unknown=WORDS.filter(w=>!S.words.includes(w)),callCost=has("sim")?0:50,n=stageCount(),next=STAGES[n];
   $("#screen").innerHTML=`
-    ${needBackup()?`<div class="panel"><h2>💾 Резервная копия</h2><p>Давно не было копии сохранения. Если телефон потеряется или браузер очистит данные — дом для мамы придётся строить заново.</p>
+    ${needBackup()?`<div class="panel" data-tab="home"><h2>💾 Резервная копия</h2><p>Давно не было копии сохранения. Если телефон потеряется или браузер очистит данные — дом для мамы придётся строить заново.</p>
       <div class="row"><button class="main" id="bkFile">Сохранить файл</button><button id="bkLater">Позже</button></div><p class="log">Можно и кодом сохранения — в ⚙️.</p></div>`:""}
-    <div class="panel">
+    <div class="panel" data-tab="home">
       <h2>Вечер ${S.day}-го дня</h2>
       ${hero()}
-      <p class="log">Ночью спишется: жильё 110₽${S.helper?" + зарплата Фарходу 70₽":""}.</p>
-      <button id="call" ${S.called||S.money<callCost?"disabled":""}>📞 Позвонить семье <small>${callCost?callCost+"₽":"Бесплатно"} · счастье +30</small></button>
+      <p class="log">Ночью спишется: жильё 110₽${S.helper?" + Фарходу 70₽":""}${crewWage()?" + землякам "+crewWage()+"₽":""}.</p>
+      <button id="call" ${S.called||S.money<callCost?"disabled":""}>📞 Видеозвонок семье <small>${callCost?callCost+"₽":"Бесплатно"} · счастье до +35, если поймаешь связь</small></button>
       ${S.quest?`<button id="quest" ${S.money<S.quest.need?"disabled":""}>💍 ${S.quest.text} <small>${S.quest.need}₽ · успеть до ${S.quest.deadline}-го дня · счастье +25</small></button>`:""}
       <div class="row"><button id="send1" ${S.money<100?"disabled":""}>💸 100₽ домой</button><button id="send5" ${S.money<500?"disabled":""}>💸 500₽ домой</button></div>
       <button id="nas" ${S.nasBought||S.money<40?"disabled":""}>🌿 Купить насвай на завтра <small>40₽ · завтра руки быстрее${S.tol>2?" (но уже слабее)":""}</small></button>
       <button id="learn" ${S.learned||!unknown.length?"disabled":""}>📖 Выучить слово <small>${unknown.length?"Бесплатно · соседка Нигора учит по разговорнику":"Билибиджон знает все слова. Почти профессор."}</small></button>
       ${!S.eve.gig?`<button id="gig">💪 Подработать <small>Быстрые деньги без заказчиков · счастье −5</small></button>`:""}
-      ${S.eve.nigora?`<button id="nig">🔧 Нигора просит прибить полку <small>Бесплатно, по-соседски · счастье и скидка на плов</small></button>`:""}
+      ${S.eve.nigora?`<button id="nig">${NIGORA_REQ[S.eve.nreq].e} Нигора просит ${NIGORA_REQ[S.eve.nreq].ask} <small>Бесплатно, по-соседски · дружба: ${S.stats.nigora||0} · счастье и подарок</small></button>`:""}
+      ${S.eve.wedding?`<button id="wed">💍 Свадьба брата — прямой эфир! <small>Скажи тост по видеосвязи</small></button>`:""}
+      ${S.kittenPending?`<button id="kit">🐈 Кот заказчика привёл котят. Один смотрит на тебя <small>Забрать котёнка в общагу?</small></button>`:""}
+      ${!S.eve.nardy&&(S.money>=20||S.eve.blackout)?`<button id="nardy">🎲 Нарды с Рустамом <small>${S.eve.blackout?"При свечах, бесплатно":"Ставка 20₽"} · Рустам иногда жульничает</small></button>`:""}
+      ${S.pigeon>=8&&!S.nestFound&&!S.eve.pig?`<button id="pig">🕵️ Выследить голубя-рецидивиста <small>Краж: ${S.pigeon}. Пора это прекратить.</small></button>`:""}
       <button class="main" id="sleep">Спать</button>
     </div>
-    ${S.log.length?`<div class="panel log">${S.log.map(l=>`<p>${l}</p>`).join("")}</div>`:""}
-    <div class="panel"><h2>📄 Документы</h2><div class="skills">
+    ${S.log.length?`<div class="panel log" data-tab="home">${S.log.map(l=>`<p>${l}</p>`).join("")}</div>`:""}
+    ${partyHtml()}${companyHtml()}
+    <div class="panel" data-tab="work"><h2>📄 Документы</h2><div class="skills">
       <div><span>🩺 Медкомиссия</span><span>${S.docs.med?"✓":"—"}</span></div>
       <div><span>📖 Экзамен по языку</span><span>${S.docs.exam?"✓":"—"}</span></div>
       <div><span>📄 Патент</span><span>${patentOk()?`до ${S.docs.patent}-го дня`:S.docs.had?"просрочен ❗":"нет"}</span></div>
@@ -1138,58 +1753,67 @@ function renderEvening(){
       <div><span>⚖️ Нарушения</span><span>${S.strikes} из 3</span></div></div>
       <button id="reg" ${S.money<40||S.docs.reg-S.day>5?"disabled":""}>🏠 Регистрация у коменданта <small>40₽ · на 15 дней${S.docs.reg-S.day>5?" · пока не нужно":""}</small></button>
       <p class="log">Патент оформляется утром в миграционном центре.</p></div>
-    <div class="panel"><h2>Ужин</h2>
+    <div class="panel" data-tab="dorm"><h2>Ужин</h2>
+      ${S.stats.nigora?`<p class="log">🍚 Дружба с Нигорой: ${S.stats.nigora} · ${nigoraPerks()}</p>`:""}
       ${S.ate?`<p class="log">${S.ate==="pies"?"Сегодня ужин — пирожки бабушки Зины.":"Билибиджон сыт и доволен."}</p>`:'<p class="log">Без ужина завтра будет тяжело.</p>'}
       ${FOOD.map(f=>`<button data-f="${f.id}" ${S.ate||S.money<foodPrice(f)?"disabled":""}>${f.e} ${f.name} <small>${foodPrice(f)}₽ · ${f.desc}</small></button>`).join("")}
     </div>
-    <div class="panel house"><h2>Дом для мамы</h2>${house(n)}
+    <div class="panel house" data-tab="goal"><h2>Дом для мамы</h2>${house(n)}
       <p>${S.endless?"Дом построен! Теперь Билибиджон копит на мечты.":next?`Следующий этап: <b>${next.name}</b> — ещё ${next.at-S.sent}₽`:"Всё оплачено! Осталась ванная."}</p>
       <p class="log">Отправлено всего: ${S.sent}₽ из ${GOAL}₽</p></div>
-    <div class="panel"><h2>Бригада</h2>
+    <div class="panel" data-tab="work"><h2>Бригада</h2>
       ${S.helper?`<p>Земляк Фарход работает с тобой. Исправляет четверть ошибок.</p><button id="fire">Отпустить Фарходa <small>Он не обидится. Почти.</small></button>`
       :`<p class="log">Земляк Фарход ищет работу. Будет исправлять четверть твоих ошибок.</p><button id="hire" ${S.money<150||S.rep<25?"disabled":""}>👷 Нанять Фарходa <small>150₽ сразу + 70₽ в день${S.rep<25?" · нужна репутация 25":""}</small></button>`}
     </div>
-    <div class="panel skills"><h2>Профессии и навыки</h2>${Object.entries(JOBS).map(([k,j])=>`<div><span>${j.gig?GIG_E[k]+" ":""}${j.name}</span><span>${unlocked(k)?"★".repeat(lvl(k))+"☆".repeat(5-lvl(k)):"🔒 "+reqText(k)}</span></div>`).join("")}
+    ${crewHtml()}
+    <div class="panel skills" data-tab="work"><h2>Профессии и навыки</h2>${Object.entries(JOBS).map(([k,j])=>`<div><span>${j.gig?GIG_E[k]+" ":""}${j.name}</span><span>${unlocked(k)?"★".repeat(lvl(k))+"☆".repeat(5-lvl(k)):"🔒 "+reqText(k)}</span></div>`).join("")}
       <p class="log">Каждые 3 заказа — новая звезда: работа даётся легче.</p></div>
-    <div class="panel"><h2>Строительный рынок</h2>
-      <p class="log">Дядя Ашот продаёт инструменты. Говорит, что со скидкой. Скидки никто не видел.</p>
-      ${TOOLS.map(t=>`<button data-t="${t.id}" class="${has(t.id)?'owned':''}" ${has(t.id)||S.money<t.price?"disabled":""}>${t.e} ${t.name} <small>${has(t.id)?"Уже куплено":t.price+"₽ · "+t.desc}</small></button>`).join("")}
+    <div class="panel" data-tab="shop"><h2>${ashot()[0]}</h2>
+      <p class="log">${ashot()[2]}</p>
+      ${TOOLS.map(t=>`<button data-t="${t.id}" class="${has(t.id)?'owned':''}" ${has(t.id)||S.money<toolPrice(t)?"disabled":""}>${t.e} ${t.name} <small>${has(t.id)?"Уже куплено":toolPrice(t)+"₽ · "+t.desc}</small></button>`).join("")}
     </div>
-    <div class="panel"><details><summary>Ачивки ${S.ach.length} / ${Object.keys(ACH).length}</summary><div class="ach" style="margin-top:8px">
+    ${reviewsHtml()}
+    ${wardrobeHtml()}
+    <div class="panel" data-tab="goal"><details open><summary>Ачивки ${S.ach.length} / ${Object.keys(ACH).length}</summary><div class="ach" style="margin-top:8px">
       ${Object.entries(ACH).map(([k,a])=>`<div class="${S.ach.includes(k)?'':'locked'}">${a[0]}<b>${a[1]}</b>${a[2]}</div>`).join("")}</div></details></div>
-    ${S.words.length?`<div class="panel"><div class="who">Словарь Билибиджона</div><div class="words">${S.words.map(w=>`<span>${w}</span>`).join("")}</div></div>`:""}`;
-  $("#call").onclick=()=>{S.money-=callCost;S.happy=clamp(S.happy+30,0,100);S.called=true;S.stats.calls++;Snd.ring();
-    if(!S.quest&&S.day>=3&&Math.random()<.4){const q=rnd(QUESTS);S.quest={text:q.text,need:q.need,deadline:S.day+q.days};S.log.unshift(`Мама: «Сынок, тут такое дело… ${q.text.toLowerCase()}». Нужно ${q.need}₽ до ${S.quest.deadline}-го дня.`);}
-    else S.log.unshift(rnd(CALLS));render();};
+    ${S.words.length?`<div class="panel" data-tab="goal"><div class="who">Словарь Билибиджона</div><div class="words">${S.words.map(w=>`<span>${w}</span>`).join("")}</div></div>`:""}`;
+  $("#call").onclick=()=>startCall(callCost);
   if(S.quest)$("#quest").onclick=()=>{S.money-=S.quest.need;S.happy=clamp(S.happy+25,0,100);S.log.unshift(`Деньги ушли: «${S.quest.text}». Вся родня звонит по очереди и благодарит.`);S.quest=null;unlock("quest");Snd.fanfare();render();};
   $("#send1").onclick=()=>sendHome(100);$("#send5").onclick=()=>sendHome(500);
   $("#nas").onclick=()=>{S.money-=40;S.nasBought=true;S.tol++;S.log.unshift(S.tol>4?"Продавец насвая узнаёт Билибиджона по шагам.":"Насвай куплен. Завтра будет продуктивно.");Snd.nas();render()};
-  $("#learn").onclick=()=>{const w=unknown[0];S.words.push(w);S.learned=true;S.log.unshift(`Новое слово: «${w}». Билибиджон повторил его 200 раз. Сосед попросил перестать.`);Snd.chime();render()};
-  document.querySelectorAll("[data-f]").forEach(b=>b.onclick=()=>{const f=FOOD.find(x=>x.id===b.dataset.f);S.money-=foodPrice(f);S.ate=f.id;S.happy=clamp(S.happy+f.h,0,100);S.log.unshift(`${f.e} ${f.name}. ${f.id==="dosh"?"Классика жанра.":f.id==="plov"?"Нигора положила добавку. Это любовь? Это плов.":"Шашлык! Билибиджон чувствует себя Эдиком."}`);Snd.coin();render();});
+  $("#learn").onclick=()=>{const n=(S.stats.nigora||0)>=4?2:1,ws=unknown.slice(0,n);ws.forEach(w=>S.words.push(w));S.learned=true;S.log.unshift(ws.length>1?`Новые слова: «${ws.join("» и «")}». Нигора хвалит: «Быстро учишься!»`:`Новое слово: «${ws[0]}». Билибиджон повторил его 200 раз. Сосед попросил перестать.`);Snd.chime();render()};
+  document.querySelectorAll("[data-f]").forEach(b=>b.onclick=()=>{const f=FOOD.find(x=>x.id===b.dataset.f);S.money-=foodPrice(f);S.ate=f.id;S.happy=clamp(S.happy+(f.id==="plov"&&(S.stats.nigora||0)>=5?14:f.h),0,100);S.log.unshift(`${f.e} ${f.name}. ${f.id==="dosh"?"Классика жанра.":f.id==="plov"?"Нигора положила добавку. Это любовь? Это плов.":"Шашлык! Билибиджон чувствует себя Эдиком."}`);Snd.coin();render();});
   if(S.helper)$("#fire").onclick=()=>{S.helper=false;S.log.unshift("Фарход ушёл. На прощание оставил свой шпатель и анекдот.");render();};
   else $("#hire").onclick=()=>{S.money-=150;S.helper=true;S.log.unshift("Фарход в бригаде! Первым делом он позвонил маме и рассказал, что теперь работает «в компании».");unlock("brigade");Snd.coin();render();};
-  document.querySelectorAll("[data-t]").forEach(b=>b.onclick=()=>{const t=TOOLS.find(x=>x.id===b.dataset.t);S.money-=t.price;S.tools.push(t.id);S.log.unshift(`Куплено: ${t.name}. Билибиджон спит с ним в обнимку.`);Snd.coin();render();});
+  document.querySelectorAll("[data-t]").forEach(b=>b.onclick=()=>{const t=TOOLS.find(x=>x.id===b.dataset.t);S.money-=toolPrice(t);S.tools.push(t.id);S.log.unshift(`Куплено: ${t.name}. Билибиджон спит с ним в обнимку.`);Snd.coin();render();});
   const g=$("#gig");if(g)g.onclick=()=>{const opts=Object.keys(JOBS).filter(k=>JOBS[k].gig).sort(()=>Math.random()-.5).slice(0,2);
     showDialog("Подработка","<p class='log'>Сегодня есть такие варианты:</p>",[...opts.map(k=>[`${GIG_E[k]} ${JOBS[k].name} · до ${JOBS[k].base}₽`,()=>{closeDialog();S.eve.gig=true;startJob({type:k,client:"gig",gig:true,base:JOBS[k].base,text:""});}]),["Не сегодня",closeDialog]]);};
+  eveningExtras();
+  applyTabs();
+  const pg=$("#pig");if(pg)pg.onclick=()=>{S.eve.pig=true;S.phase="mini";S.mini={kind:"pigeon"};render();};
+  document.querySelectorAll("[data-look]").forEach(b=>b.onclick=()=>{const [k,v]=b.dataset.look.split(":");S.look[k]=v;Snd.click(1);render();});
   const rg=$("#reg");if(rg)rg.onclick=()=>{S.money-=40;S.docs.reg=Math.max(S.docs.reg,S.day-1)+15;S.log.unshift("🏠 "+rnd(["Комендант поставил печать и рассказал про своего кота.","Регистрация продлена. Комендант попросил заодно починить кран.","Комендант долго искал ручку. Нашёл. Печать стоит."]));Snd.coin();render();};
   const bk=$("#bkFile");if(bk){bk.onclick=async()=>{await exportFile();render();};$("#bkLater").onclick=()=>{S.backupSnooze=S.day+2;render();};}
-  const ng=$("#nig");if(ng)ng.onclick=()=>{S.eve.nigora=false;startJob({type:"drywall",client:"nigora",nigora:true,base:0,text:""});};
+  const ng=$("#nig");if(ng)ng.onclick=()=>{const k=S.eve.nreq,R=NIGORA_REQ[k];S.eve.nigora=false;startJob({type:R.type,client:"nigora",nigora:true,req:k,base:0,text:""});};
   $("#sleep").onclick=()=>{if(S.eve.night){S.eve.night=false;Snd.ring();vib([200,100,200]);
     showDialog("📞 3:00 ночи","<p>Звонит незнакомый номер: «Прорвало трубу! Вода везде! Плачу вдвое!»</p><p class='log'>Утром Билибиджон будет невыспавшимся.</p>",[
       ["Поехать (×2 оплата)",()=>{closeDialog();startJob({type:"plumbing",client:"night",night:true,base:JOBS.plumbing.base*2,text:""});}],
       ["Спать дальше",()=>{closeDialog();sleep();}]]);}else sleep();};
 }
 function sleep(){
-  S.money-=110+(S.helper?70:0);
-  S.happy-=(has("headphones")?8:14)+(S.called?0:6);
+  const happyBefore=S.happy;S.money-=110+(S.helper?70:0)+crewWage();
+  S.happy-=(has("headphones")?8:14)+(S.called?0:6)-(S.kitten?4:0);
   S.hungry=!S.ate;if(S.hungry)S.happy-=10;
   S.strong=S.ate==="shash";S.ate=null;
   S.withdraw=S.nasActive&&!S.nasBought;
   S.nasStreak=S.nasBought?S.nasStreak+1:0;if(S.nasStreak>=5)unlock("nas5");
   if(!S.nasBought&&!S.nasActive&&S.tol>0)S.tol=Math.max(0,S.tol-1);
   S.nasActive=S.nasBought;S.nasBought=false;S.called=false;S.learned=false;
-  S.tired=!!S.nightPending;S.nightPending=false;S.eve={};
+  S.tired=!!S.nightPending;S.nightPending=false;S.eve={};S.tab="home";S.blog.today=false;S.phone.photo=false;S.rodeToday=false;S.late=false;
+  const unanswered=S.phone.ask!=null;
   S.day++;S.offers=null;S.phase="morning";S.mnotes=[];
+  if(unanswered){S.happy-=6;S.mnotes.push("📱 Мама не дождалась ответа и написала всем родственникам, что ты пропал.");S.phone.ask=null;}
+  dailyMessages();nightStuff(happyBefore);
   if(S.quest&&S.day>S.quest.deadline){S.happy-=25;S.mnotes.push(`Не успел: «${S.quest.text}». Мама сказала «ничего, сынок». От этого ещё хуже.`);S.quest=null;}
   S.happy=clamp(S.happy,0,100);
   if(S.strikes>=3)S.over="deported";else if(S.money<0)S.over="broke";else if(S.happy<=0)S.over="sad";
@@ -1227,10 +1851,13 @@ function openSettings(){
   showDialog("Настройки",`<p class="log">Версия ${APP_VERSION} · копия сохранения: ${S.lastBackup?"день "+S.lastBackup:"ещё не делалась"}${persisted?" · 🔒 защищено от очистки":""}</p>`,[
     [`🔊 Звук: ${on(st.sound)}`,()=>{st.sound=!st.sound;Snd.chime();save();openSettings();}],
     [`🎵 Музыка: ${on(st.music)}`,()=>{st.music=!st.music;st.music?Music.start():Music.stop();save();openSettings();}],
-    [`📳 Вибрация: ${on(st.vibe)}`,()=>{st.vibe=!st.vibe;vib(60);save();openSettings();}],
+    navigator.vibrate?[`📳 Вибрация: ${on(st.vibe)}`,()=>{st.vibe=!st.vibe;vib(60);save();openSettings();}]:["📳 Вибрация: нет на этом устройстве",()=>toast("Этот браузер не умеет вибрировать 🤷")],
     ["💾 Сохранить в файл",exportFile],
     ["📂 Загрузить из файла",importFile],
     ["🔑 Код сохранения",openSaveCode],
+    ...(canNotify()?[[`🔔 Уведомления о новых версиях: ${on(!!st.notify)}`,toggleNotify]]:[]),
+    ...(standalone?[]:[["📲 Установить приложение",installApp]]),
+    ["🔐 Секретный код",openSecret],
     ["🏆 Рекорды",()=>showDialog("Рекорды",recordsHtml(),[["Закрыть",closeDialog]])],
     ["🗑️ Начать заново",()=>showDialog("Точно?","Весь прогресс пропадёт. Ачивки тоже.",[["Нет, играть дальше",closeDialog],["Да, заново",()=>{const set=S.settings;S=fresh();S.settings=set;closeDialog();render();}]])],
     ["Закрыть",closeDialog]],true);
@@ -1249,7 +1876,7 @@ function askPersist(){try{if(navigator.storage&&navigator.storage.persist){navig
 function needBackup(){return S.day>=4&&S.day-(S.lastBackup||0)>=5&&S.day>=(S.backupSnooze||0);}
 function parseSave(txt){txt=String(txt).trim();let d;try{d=JSON.parse(txt);}catch(e){d=JSON.parse(decodeURIComponent(escape(atob(txt))));}
   if(d&&d.game==="bilibidjon")d=d.state;if(!d||typeof d.day!=="number")throw new Error("bad save");return d;}
-function applySave(d){const set=S.settings;S=Object.assign(fresh(),d);S.settings=set;S.stats=Object.assign(fresh().stats,S.stats||{});S.eve=S.eve||{};S.xp=S.xp||{};S.ach=S.ach||[];S.docs=Object.assign(fresh().docs,S.docs||{});
+function applySave(d){const set=S.settings;S=Object.assign(fresh(),d);S.settings=set;S.stats=Object.assign(fresh().stats,S.stats||{});S.eve=S.eve||{};S.xp=S.xp||{};S.ach=S.ach||[];S.docs=Object.assign(fresh().docs,S.docs||{});S.phone=Object.assign(fresh().phone,S.phone||{});S.blog=Object.assign(fresh().blog,S.blog||{});S.look=Object.assign(fresh().look,S.look||{});S.reviews=S.reviews||[];S.codes=S.codes||[];S.crew=Object.assign(fresh().crew,S.crew||{});S.sergey=Object.assign(fresh().sergey,S.sergey||{});if(S.phase==="mini"){S.phase=S.mini&&S.mini.kind==="commute"?"morning":"evening";S.mini=null;}if(S.phase==="commission"&&!S.com)S.phase="evening";
   if(S.phase==="work")S.phase="morning";if(S.phase==="migration"&&!S.mig)S.mig={queued:false,windows:0,log:[],sub:null};closeDialog();save();toast("Игра загружена!");Snd.fanfare();render();}
 async function exportFile(){
   askPersist();
@@ -1271,37 +1898,87 @@ function importFile(){
 }
 
 /* ================= ОБНОВЛЕНИЯ ================= */
-let updateReady=null,updateDismissed=false,installingUpdate=false,reloading=false;
-async function onUpdateReady(worker){
-  let info={version:"",notes:""};
-  try{info=await (await fetch("version.json",{cache:"no-store"})).json();}catch(e){}
-  updateReady={worker,info};updateDismissed=false;showUpdate();
+// Состояния: downloading (идёт скачивание, есть %) → ready (можно ставить) → installing (шаги установки) → перезапуск.
+let upd={state:null,p:0,info:{version:"",notes:""},worker:null,step:0},updateDismissed=false,reloading=false;
+const CapLN=window.Capacitor&&window.Capacitor.Plugins&&window.Capacitor.Plugins.LocalNotifications;
+const CapBR=window.Capacitor&&window.Capacitor.Plugins&&window.Capacitor.Plugins.BackgroundRunner;
+const BR_LABEL="com.z0rd4n0v1ch.bilibidjon.check";
+const canNotify=()=>!!CapLN||("Notification" in window&&"serviceWorker" in navigator&&location.protocol!=="file:");
+async function fetchInfo(){try{const i=await (await fetch("version.json?t="+Date.now(),{cache:"no-store"})).json();if(i&&i.version)upd.info=i;}catch(e){}}
+function notifyUpdate(){
+  if(!S.settings.notify)return;
+  const title=`Билибиджон ${upd.info.version||""} готов к установке 🧱`,body=upd.info.notes||"Открой игру и нажми «Установить».";
+  if(CapLN){CapLN.schedule({notifications:[{id:1002,title,body}]}).catch(()=>{});return;}
+  if("Notification" in window&&Notification.permission==="granted"&&navigator.serviceWorker)
+    navigator.serviceWorker.ready.then(r=>r.showNotification(title,{body,icon:"icon-192.png",badge:"icon-192.png",tag:"bili-update"})).catch(()=>{});
+}
+function syncRunner(){if(CapBR)CapBR.dispatchEvent({label:BR_LABEL,event:"syncVersion",details:{version:APP_VERSION,notify:!!S.settings.notify}}).catch(()=>{});}
+async function toggleNotify(){
+  const st=S.settings;st.notifyAsked=true;
+  if(st.notify){st.notify=false;save();syncRunner();toast("🔕 Уведомления выключены");return dialogOpen?openSettings():render();}
+  let ok=false;
+  try{
+    if(CapLN){const r=await CapLN.requestPermissions();ok=r.display==="granted";if(ok&&CapBR)await CapBR.requestPermissions({apis:["notifications"]}).catch(()=>{});}
+    else ok=(await Notification.requestPermission())==="granted";
+  }catch(e){}
+  st.notify=ok;save();syncRunner();
+  toast(ok?"🔔 Сообщу, когда выйдет новая версия":"Уведомления запрещены в настройках телефона");
+  dialogOpen?openSettings():render();
+}
+function notifyCard(){
+  if(!canNotify()||S.settings.notifyAsked||S.settings.notify||!(CapLN||standalone))return "";
+  return `<div class="panel"><div class="who">Обновления</div><p>🔔 Присылать уведомление, когда выходит новая версия Билибиджона?</p>
+    <div class="row"><button class="main" id="nfYes">Да</button><button id="nfNo">Не надо</button></div></div>`;
 }
 function showUpdate(){
-  const old=$("#upd");if(old)old.remove();
-  if(!updateReady||updateDismissed||S.phase==="work"||dialogOpen)return;
-  const {info}=updateReady,d=document.createElement("div");d.id="upd";d.className="upd";
-  d.innerHTML=`<div class="panel"><h2>Обновление готово${info.version&&info.version!==APP_VERSION?" · v"+esc(info.version):""}</h2>${info.notes?`<p>${esc(info.notes)}</p>`:""}<p class="log">Уже скачано. Установка займёт секунду, прогресс сохранится.</p><button class="main" id="updGo">Установить</button><button id="updLater">Позже</button></div>`;
-  document.body.appendChild(d);
-  $("#updGo").onclick=()=>{save();installingUpdate=true;$("#updGo").textContent="Устанавливаю…";$("#updGo").disabled=true;
-    updateReady.worker.postMessage({type:"SKIP_WAITING"});setTimeout(()=>{if(!reloading){reloading=true;location.reload();}},4000);};
-  $("#updLater").onclick=()=>{updateDismissed=true;d.remove();};
+  let d=$("#upd");
+  const hide=!upd.state||(upd.state==="ready"&&updateDismissed)||(upd.state!=="installing"&&(S.phase==="work"||S.phase==="mini"||dialogOpen));
+  if(hide){if(d)d.remove();return;}
+  const v=upd.info.version&&upd.info.version!==APP_VERSION?" v"+esc(upd.info.version):"",pct=Math.round(upd.p*100);
+  let body="";
+  if(upd.state==="downloading")body=`<h2>🆕 Новая версия${v}</h2>${upd.info.notes?`<p class="log">${esc(upd.info.notes)}</p>`:""}
+    <p>Скачиваю… <b>${pct}%</b></p><div class="bar big"><i style="width:${pct}%"></i></div><p class="log">Можно играть дальше — скачивание идёт в фоне.</p>`;
+  else if(upd.state==="ready")body=`<h2>✅ Обновление${v} скачано</h2>${upd.info.notes?`<p>${esc(upd.info.notes)}</p>`:""}
+    <div class="bar big"><i style="width:100%"></i></div><p class="log">Установка займёт пару секунд, прогресс сохранится.</p><button class="main" id="updGo">Установить</button><button id="updLater">Позже</button>`;
+  else if(upd.state==="installing"){const steps=["Сохраняю прогресс","Переключаюсь на новую версию","Удаляю старую версию","Перезапускаю игру"],s=Math.min(upd.step,3);
+    body=`<h2>⚙️ Устанавливаю${v}</h2><p>Шаг ${s+1} из 4: ${steps[s]}…</p><div class="bar big"><i style="width:${Math.round((s+1)/4*100)}%"></i></div>`;}
+  else if(upd.state==="error")body=`<h2>⚠️ Обновление не скачалось</h2><p class="log">Попробую ещё раз, когда будет интернет.</p><button id="updLater">Ок</button>`;
+  if(!d){d=document.createElement("div");d.id="upd";d.className="upd";document.body.appendChild(d);}
+  d.innerHTML=`<div class="panel" role="status" aria-live="polite">${body}</div>`;
+  const go=$("#updGo");if(go)go.onclick=installUpdate;
+  const lt=$("#updLater");if(lt)lt.onclick=()=>{if(upd.state==="error")upd.state=null;else updateDismissed=true;d.remove();};
+}
+function installUpdate(){
+  if(!upd.worker)return;save();upd.state="installing";upd.step=0;showUpdate();
+  try{localStorage.setItem("bili_updated","1");}catch(e){}
+  setTimeout(()=>{upd.step=1;showUpdate();upd.worker.postMessage({type:"SKIP_WAITING"});},500);
+  setTimeout(()=>{if(!reloading){reloading=true;location.reload();}},8000);
 }
 if("serviceWorker" in navigator&&location.protocol!=="file:"){
-  navigator.serviceWorker.addEventListener("controllerchange",()=>{if(installingUpdate&&!reloading){reloading=true;location.reload();}});
+  navigator.serviceWorker.addEventListener("message",e=>{const m=e.data||{};
+    if(!navigator.serviceWorker.controller)return; // первая установка — не обновление
+    if(m.type==="SW_PROGRESS"&&(upd.state===null||upd.state==="downloading")&&m.version!==APP_VERSION){upd.state="downloading";upd.p=m.p||0;if(!upd.info.version)upd.info.version=m.version;showUpdate();}
+    if(m.type==="SW_ERROR"&&upd.state==="downloading"){upd.state="error";showUpdate();}
+    if(m.type==="SW_STEP"&&upd.state==="installing"){upd.step=Math.max(upd.step,m.step);showUpdate();}});
+  navigator.serviceWorker.addEventListener("controllerchange",()=>{if(upd.state==="installing"&&!reloading){upd.step=3;showUpdate();reloading=true;setTimeout(()=>location.reload(),400);}});
   window.addEventListener("load",async()=>{
     try{
       const reg=await navigator.serviceWorker.register("sw.js");
       const check=()=>reg.update().catch(()=>{});
-      if(reg.waiting&&navigator.serviceWorker.controller)onUpdateReady(reg.waiting);
-      reg.addEventListener("updatefound",()=>{const w=reg.installing;if(!w)return;
-        w.addEventListener("statechange",()=>{if(w.state==="installed"&&navigator.serviceWorker.controller)onUpdateReady(w);});});
+      if(reg.waiting&&navigator.serviceWorker.controller){upd.state="ready";upd.worker=reg.waiting;fetchInfo().then(()=>{showUpdate();if(document.hidden)notifyUpdate();});}
+      reg.addEventListener("updatefound",()=>{const w=reg.installing;if(!w||!navigator.serviceWorker.controller)return;
+        upd.state="downloading";upd.p=0;updateDismissed=false;fetchInfo().then(showUpdate);showUpdate();
+        w.addEventListener("statechange",()=>{
+          if(w.state==="installed"){upd.state="ready";upd.p=1;upd.worker=w;fetchInfo().then(()=>{showUpdate();if(document.hidden)notifyUpdate();});}
+          if(w.state==="redundant"&&upd.state==="downloading"){upd.state="error";showUpdate();}});});
       setInterval(check,30*60*1000);
-      document.addEventListener("visibilitychange",()=>{if(!document.hidden)check();});
+      document.addEventListener("visibilitychange",()=>{if(!document.hidden)check();else if(upd.state==="ready")notifyUpdate();});
       window.addEventListener("online",check);
     }catch(e){/* нет sw.js рядом (например, превью) — игра работает и без обновлений */}
   });
 }
+try{if(localStorage.getItem("bili_updated")){localStorage.removeItem("bili_updated");setTimeout(()=>{toast("✅ Игра обновлена до версии "+APP_VERSION);Snd.chime();},700);}}catch(e){}
+setTimeout(syncRunner,1500);
 
 /* ================= ДИАЛОГИ И КНОПКА «НАЗАД» ================= */
 let dialogOpen=false;
@@ -1332,10 +2009,51 @@ else if(standalone){history.pushState({bili:1},"");window.addEventListener("pops
 document.addEventListener("keydown",e=>{if(e.key==="Escape")onBack();});
 document.addEventListener("visibilitychange",()=>{if(document.hidden&&S.phase==="work"&&!dialogOpen)onBack();save();});
 
+/* ================= iOS И ПК ================= */
+const IS_IOS=/iPhone|iPad|iPod/.test(navigator.userAgent)||(navigator.platform==="MacIntel"&&navigator.maxTouchPoints>1);
+const DESKTOP=matchMedia("(hover:hover) and (pointer:fine)").matches;
+// iOS разблокирует звук только по «настоящему» жесту — ловим все виды касаний
+["touchend","click","keydown"].forEach(ev=>document.addEventListener(ev,()=>{Snd.init();Music.start();},{capture:true,passive:true}));
+document.addEventListener("contextmenu",e=>{if(e.target.tagName==="CANVAS")e.preventDefault();});
+let installEvt=null;
+window.addEventListener("beforeinstallprompt",e=>{e.preventDefault();installEvt=e;});
+window.addEventListener("appinstalled",()=>{installEvt=null;toast("📲 Билибиджон установлен!");});
+function installApp(){
+  if(installEvt){closeDialog();installEvt.prompt();installEvt.userChoice.finally(()=>{installEvt=null;});return;}
+  if(IS_IOS)return showDialog("📲 Установить на iPhone",`<p>1. Нажми <b>«Поделиться»</b> — квадрат со стрелкой внизу Safari.</p><p>2. Выбери <b>«На экран „Домой“»</b>.</p><p>3. Нажми <b>«Добавить»</b>.</p>
+    <p class="log">Важно: у установленной игры свои сохранения. Перенеси прогресс через ⚙️ → «💾 Сохранить в файл», а в установленной игре — «📂 Загрузить из файла».</p>`,[["Понятно",()=>{S.settings.iosHint=true;save();closeDialog();render();}]]);
+  showDialog("📲 Установить приложение",`<p>В Chrome или Edge нажми значок установки справа в адресной строке или меню ⋮ → «Установить приложение».</p><p class="log">Игра откроется в отдельном окне и будет работать без интернета.</p>`,[["Понятно",closeDialog]]);
+}
+function iosCard(){
+  if(!IS_IOS||standalone||S.settings.iosHint)return "";
+  return `<div class="panel"><div class="who">Совет для iPhone</div><p>Добавь Билибиджона на экран «Домой»: игра откроется на весь экран и будет работать без интернета.</p>
+    <div class="row"><button class="main" id="iosHow">📲 Как?</button><button id="iosNo">Не надо</button></div></div>`;
+}
+function keyHint(t){
+  if(!DESKTOP)return "";
+  const k=["tile","laminate","wallpaper"].includes(t)?"⌨️ Пробел — положить":["courier","mover"].includes(t)?"⌨️ Стрелки ← →":t==="warehouse"?"⌨️ Клавиши 1, 2, 3":"🖱️ Мышью";
+  return ` <span class="keys">${k}</span>`;
+}
+function tapCanvas(fx,fy){
+  const cv=$("#cv");if(!cv||!cv.onpointerdown)return;const r=cv.getBoundingClientRect();
+  const ev={clientX:r.left+r.width*fx,clientY:r.top+r.height*fy,pointerId:1,pointerType:"mouse",buttons:1,preventDefault(){}};
+  try{cv.onpointerdown(ev);}catch(e){}
+}
+document.addEventListener("keydown",e=>{
+  if(dialogOpen||e.repeat||e.ctrlKey||e.metaKey||e.altKey)return;
+  const ph=S.phase,t=S.job&&S.job.type,tag=(e.target.tagName||"").toLowerCase();if(tag==="input"||tag==="textarea")return;
+  if(e.code==="Space"){
+    if($("#nRoll")){e.preventDefault();$("#nRoll").click();return;}
+    if((ph==="work"&&["tile","laminate","wallpaper"].includes(t))||(ph==="result"&&$("#cv"))){e.preventDefault();tapCanvas(.5,.5);}
+    return;}
+  if(ph==="work"&&["courier","mover"].includes(t)&&(e.key==="ArrowLeft"||e.key==="ArrowRight")){e.preventDefault();tapCanvas(e.key==="ArrowLeft"?.2:.8,.5);return;}
+  if(ph==="work"&&t==="warehouse"&&["1","2","3"].includes(e.key)){e.preventDefault();tapCanvas((+e.key-.5)/3,.93);}
+});
+
 /* ================= СТАРТ ================= */
 (function(){const old=load()||{};S=Object.assign(fresh(),old);
   if("sound" in old&&!old.settings){S.settings.sound=old.sound;delete S.sound;}
-  S.stats=Object.assign(fresh().stats,S.stats||{});S.eve=S.eve||{};if(!old.docs&&old.day>1)S.docGrace=old.day+4;S.docs=Object.assign(fresh().docs,S.docs||{});if(S.phase==="migration"&&!S.mig)S.mig={queued:false,windows:0,log:[],sub:null};S.xp=S.xp||{};S.ach=S.ach||[];S.mnotes=S.mnotes||[];
+  S.stats=Object.assign(fresh().stats,S.stats||{});S.eve=S.eve||{};if(!old.docs&&old.day>1)S.docGrace=old.day+4;S.docs=Object.assign(fresh().docs,S.docs||{});S.phone=Object.assign(fresh().phone,S.phone||{});S.blog=Object.assign(fresh().blog,S.blog||{});S.look=Object.assign(fresh().look,S.look||{});S.reviews=S.reviews||[];S.codes=S.codes||[];S.crew=Object.assign(fresh().crew,S.crew||{});S.sergey=Object.assign(fresh().sergey,S.sergey||{});if(S.phase==="mini"){S.phase=S.mini&&S.mini.kind==="commute"?"morning":"evening";S.mini=null;}if(S.phase==="commission"&&!S.com)S.phase="evening";if(S.phase==="migration"&&!S.mig)S.mig={queued:false,windows:0,log:[],sub:null};S.xp=S.xp||{};S.ach=S.ach||[];S.mnotes=S.mnotes||[];
   if(S.phase==="work")S.phase="morning";
   if(S.phase==="result"&&S.result&&S.result.valeraDone===undefined){S.result.valeraDone=true;S.result.qDone=true;S.result.dr=0;}
 })();

@@ -113,6 +113,40 @@ if [ ! -f package.json ]; then
   npm install @capacitor/core@8 @capacitor/android@8 @capacitor/app@8
   npm install -D @capacitor/cli@8 @capacitor/assets
 fi
+if [ ! -d node_modules/@capacitor/local-notifications ] || [ ! -d node_modules/@capacitor/background-runner ]; then
+  say "Ставлю уведомления (один раз)"
+  npm install @capacitor/local-notifications@8 @capacitor/background-runner@3 \
+    || echo "Не удалось поставить плагины уведомлений — APK соберётся без них."
+fi
+
+# фоновая проверка новой версии: раз в ~30 минут, даже когда игра закрыта
+mkdir -p www/runners
+cat > www/runners/background.js << RUNNER
+// Работает вне игры (Capacitor Background Runner). Проверяет version.json и шлёт уведомление.
+addEventListener("syncVersion", (resolve, reject, args) => {
+  try {
+    if (args && args.version) CapacitorKV.set("knownVersion", args.version);
+    if (args && args.notify !== undefined) CapacitorKV.set("notify", args.notify ? "1" : "0");
+    resolve();
+  } catch (e) { reject(e); }
+});
+addEventListener("checkVersion", async (resolve, reject) => {
+  try {
+    const n = CapacitorKV.get("notify");
+    if (!n || n.value !== "1") return resolve();
+    const res = await fetch("${SITE}version.json?t=" + Date.now());
+    const info = await res.json();
+    const known = CapacitorKV.get("knownVersion"), told = CapacitorKV.get("toldVersion");
+    const k = known && known.value, t = told && told.value;
+    if (info.version && info.version !== k && info.version !== t) {
+      CapacitorNotifications.schedule([{ id: 1001, title: "Вышел Билибиджон " + info.version + " 🧱",
+        body: info.notes || "Открой игру — обновление скачается само.", scheduleAt: new Date(Date.now() + 1000) }]);
+      CapacitorKV.set("toldVersion", info.version);
+    }
+    resolve();
+  } catch (e) { reject(e); }
+});
+RUNNER
 
 if [ "$MODE" = online ]; then
   SERVER=",\"server\":{\"url\":\"$SITE\",\"errorPath\":\"offline.html\"}"
@@ -121,7 +155,12 @@ else
 fi
 cat > capacitor.config.json << JSON
 { "appId": "$APP_ID", "appName": "$APP_NAME", "webDir": "www"$SERVER,
-  "android": { "backgroundColor": "#DDE7E9" } }
+  "android": { "backgroundColor": "#DDE7E9" },
+  "plugins": {
+    "BackgroundRunner": { "label": "com.z0rd4n0v1ch.bilibidjon.check", "src": "runners/background.js",
+      "event": "checkVersion", "repeat": true, "interval": 30, "autoStart": true },
+    "LocalNotifications": { "iconColor": "#FFC93C" }
+  } }
 JSON
 ok "capacitor.config.json записан"
 
@@ -138,6 +177,8 @@ npx cap sync android
 
 # путь к SDK и версия приложения
 echo "sdk.dir=$(winpath "$SDK")" > android/local.properties
+MANIFEST=android/app/src/main/AndroidManifest.xml
+grep -q POST_NOTIFICATIONS "$MANIFEST" || sed -i 's#</manifest>#    <uses-permission android:name="android.permission.POST_NOTIFICATIONS" />\n</manifest>#' "$MANIFEST"
 sed -i -E "s/versionCode [0-9]+/versionCode $VCODE/; s/versionName \"[^\"]*\"/versionName \"$VERSION\"/" android/app/build.gradle
 
 # нужная версия Android SDK Platform (Capacitor 8 собирает под API 36)
